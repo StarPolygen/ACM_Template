@@ -63,7 +63,7 @@ void graham(int n){
 	}
 } 
 
-//旋转卡壳 凸包直径  O(n)
+//旋转卡壳 凸包直径 最远点对 O(n)
 //注意剔除凸包边上的点 
 ll rotatingCalipers(){   
 	ll res=0;
