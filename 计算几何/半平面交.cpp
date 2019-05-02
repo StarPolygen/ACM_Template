@@ -40,7 +40,7 @@ double cross(Point p0, Point p1, Point p2) {
     return (p1.x-p0.x)*(p2.y-p0.y)-(p1.y-p0.y)*(p2.x-p0.x);
 }
 
-//消除精度影响 的判断正负性
+//消除精度影响 的浮点数判断正负性
 int dblcmp(double k) {
     if (fabs(k) < eps) return 0;
     return k > 0 ? 1 : -1;
