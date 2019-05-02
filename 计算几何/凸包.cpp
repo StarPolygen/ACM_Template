@@ -26,13 +26,35 @@ double dis(point p1,point p2)  //计算 p1p2的 距离
 //cross > 0 代表 p0p2 对 p0p1为逆时针 
 //		= 0 代表 平行 
 //cmp 函数return true时，会将参数1排在前面 
-bool cmp(point p1,point p2) //极角排序函数 ， 角度相同则距离小的在前面 
+
+//极角排序函数 ， 角度相同则距离小的在前面 
+//注意：当stack需要包含边点，且要求逆序时，使用cmp2，如稳定凸包问题 
+bool cmp(point p1,point p2) 
 {
     ll tmp=cross(list[0],p1,p2);
     if(tmp>0) return true;
     else if(tmp==0&&dis(list[0],p1)<dis(list[0],p2)) return true;
     else return false;
-}    
+}  
+
+//消除精度影响 的浮点数判断正负性
+int dblcmp(double k) {
+    if (fabs(k) < eps) return 0;
+    return k > 0 ? 1 : -1;
+}
+
+// 极角排序函数2 在判断稳定凸包时使用 
+// 最终产生的 凸集内的点 完全按照逆时针排列 
+bool cmp2(point p1,point p2){
+    ll tmp=cross(list[0],p1,p2);
+    if(tmp>0) return true;
+    else if(tmp==0){
+        if(dblcmp(atan2((double)p1.y,(double)p1.x)-PI/2)>=0) return dis(list[0],p1)>dis(list[0],p2);
+        else return dis(list[0],p1)<dis(list[0],p2);
+    }
+    else return false;
+}
+  
 void init(int n) //输入，并把  最左下方的点放在 list[0]  。并且进行极角排序 
 {
     int i,k;
@@ -54,6 +76,7 @@ void init(int n) //输入，并把  最左下方的点放在 list[0]  。并且进行极角排序
     list[k]=list[0];
     list[0]=p0;
     
+    //此处注意使用cmp还是cmp2 
     sort(list+1,list+n,cmp);
 }     
 
