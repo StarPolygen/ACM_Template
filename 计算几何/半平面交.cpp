@@ -1,8 +1,8 @@
-//POJ 3335 模板题 
-//最终可能用到的  ：p[0-(pn-1)]     	轮廓点集 封闭则为凸包  逆时针序 
-//                  pn              	轮廓点数量 
-// 					dq[bot-(top-1)] 	轮廓线编号  极角递增  
-// 					l[dq[bot-(top-1)]]  轮廓线  极角递增 
+
+//可能用到的  ：p[0-(pn-1)]     	轮廓点集 封闭则为凸包  逆时针序 
+//              pn              	轮廓点数量 
+// 				dq[bot-(top-1)] 	轮廓线编号  极角递增  
+// 				l[dq[bot-(top-1)]]  轮廓线  极角递增 
 #include<stdio.h>
 #include<math.h>
 #include<algorithm>
