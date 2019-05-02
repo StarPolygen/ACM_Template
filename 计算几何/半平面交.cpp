@@ -1,60 +1,52 @@
-//å¯èƒ½ç”¨åˆ°çš„ ï¼šp[0-(pn-1)]     è½®å»“ç‚¹é›† å°é—­åˆ™ä¸ºå‡¸åŒ…  é€†æ—¶é’ˆåº 
-//            pn              	è½®å»“ç‚¹æ•°é‡ 
-// 	      dq[bot-(top-1)] 	è½®å»“çº¿ç¼–å·  æè§’é€’å¢  
-// 	      l[dq[bot-(top-1)]]  è½®å»“çº¿  æè§’é€’å¢ 
+//¿ÉÄÜÓÃµ½µÄ £º	p[0-(pn-1)]     ÂÖÀªµã¼¯ ·â±ÕÔòÎªÍ¹°ü  ÄæÊ±ÕëĞò 
+//            	pn              	ÂÖÀªµãÊıÁ¿ 
+// 	         	dq[bot-(top-1)] 	ÂÖÀªÏß±àºÅ  ¼«½ÇµİÔö  
+// 	      		l[dq[bot-(top-1)]]  ÂÖÀªÏß  ¼«½ÇµİÔö 
 
 #include<stdio.h>
 #include<math.h>
 #include<algorithm>
 #include<iostream>
 #define ll long long
-#define maxn 110
 using namespace std;
 
 const double eps = 1e-8; 
+const int maxn=1510; 
+
 
 struct Point{
 	double x;
 	double y;
-} list[maxn],p[maxn]; 	  //list åŸå§‹ç‚¹é›†   p åŠå¹³é¢äº¤è½®å»“ç‚¹é›†åˆ,é€†æ—¶é’ˆ 
-
-int n, tol, pn;  	      //n æ€»ç‚¹æ•°  tol æ€»ç›´çº¿æ•°  pn åŠå¹³é¢è½®å»“ç‚¹æ•° 
-int dq[maxn], top, bot;   //dq åŒå‘é˜Ÿåˆ—ï¼ŒåŠå¹³é¢äº¤è½®å»“è¾¹é›†åˆ   top é˜Ÿåˆ—é¡¶   bot é˜Ÿåˆ—åº• 
+} list[maxn],p[maxn]; 	  //list Ô­Ê¼µã¼¯   p °ëÆ½Ãæ½»ÂÖÀªµã¼¯ºÏ,ÄæÊ±Õë 
 
 struct Line {
     Point a, b;
     double angle;
 } l[maxn];
 
+int n, tol, pn;  	      //n ×ÜµãÊı  tol ×ÜÖ±ÏßÊı  pn °ëÆ½ÃæÂÖÀªµãÊı 
+int dq[maxn], top, bot;   //dq Ë«Ïò¶ÓÁĞ£¬°ëÆ½Ãæ½»ÂÖÀª±ß¼¯ºÏ   top ¶ÓÁĞ¶¥   bot ¶ÓÁĞµ×
 
-//æ·»åŠ è¾¹  
-//ä½¿ç”¨æ—¶ addLine(l[tol++], a, b) 
-//åŠå¹³é¢å–å‘é‡ ab çš„å·¦è¾¹ 
+
+
+int sgn(double k) { return fabs(k) < eps ? 0 : (k > 0 ? 1 : -1); }
+//Ìí¼Ó±ß  Ê¹ÓÃÊ± addLine(l[tol++], a, b) °ëÆ½ÃæÈ¡ÏòÁ¿ ab µÄ×ó±ß 
 void addLine(Line& l, Point a, Point b){
     l.a = a;
     l.b = b;
     l.angle = atan2(b.y - a.y, b.x - a.x);
 }
-
-//å‰ä¹˜ 
 double cross(Point p0, Point p1, Point p2) {
 
   return (p1.x-p0.x)*(p2.y-p0.y)-(p1.y-p0.y)*(p2.x-p0.x);
 }
-
-//æ¶ˆé™¤ç²¾åº¦å½±å“ çš„æµ®ç‚¹æ•°åˆ¤æ–­æ­£è´Ÿæ€§
-int dblcmp(double k) {
-    if (fabs(k) < eps) return 0;
-    return k > 0 ? 1 : -1;
-}
-
-//æ’åºï¼šæè§’å°çš„æ’å‰é¢ï¼Œæè§’ç›¸åŒæ—¶ï¼Œå†³å®šæ€§çš„æ’åœ¨å‰é¢ï¼Œä»¥ä¾¿å»é‡
+//Ö±ÏßÅÅĞò£º¼«½ÇĞ¡µÄÅÅÇ°Ãæ£¬¼«½ÇÏàÍ¬Ê±£¬¾ö¶¨ĞÔµÄÅÅÔÚÇ°Ãæ£¬ÒÔ±ãÈ¥ÖØ
 inline bool cmp(const Line& l1, const Line& l2){
-    int d = dblcmp(l1.angle - l2.angle);
-    return d ? d < 0 : dblcmp(cross(l1.a, l2.a, l2.b)) > 0;
+    int d = sgn(l1.angle - l2.angle);
+    return d ? d < 0 : sgn(cross(l1.a, l2.a, l2.b)) > 0;
 }
 
-//æ±‚ä¸¤ç›´çº¿äº¤ç‚¹ 
+//ÇóÁ½Ö±Ïß½»µã  
 Point getIntersect(Line l1, Line l2) {
 	Point p;   
 	double dot1,dot2;    
@@ -65,35 +57,36 @@ Point getIntersect(Line l1, Line l2) {
 	return p;
 }
 
-//åˆ¤æ–­ l1,l2 çš„äº¤ç‚¹æ˜¯å¦åœ¨ l0 çš„å³è¾¹  
+//ÅĞ¶Ï l1,l2 µÄ½»µãÊÇ·ñÔÚ l0 µÄÓÒ±ß 
 bool judge(Line l0, Line l1, Line l2){
      Point p = getIntersect(l1, l2);
-     return dblcmp(cross(p, l0.a, l0.b)) < 0;
+     return sgn(cross(p, l0.a, l0.b)) < 0;
 }
- 
-// æ±‚è§£åŠå¹³é¢äº¤  O(nlogn) 
+
+
+// Çó½â°ëÆ½Ãæ½»  O(nlogn)  
 void HalfPlaneIntersect(){
     int i, j;
-    
-    sort(l, l + n, cmp); //æ’åº 
-    //å»é‡ 
-    for(i = 0, j = 0; i < tol; i++) if(dblcmp(l[i].angle - l[j].angle) > 0) l[++j] = l[i];
-    //æ¨¡æ‹ŸåŒç«¯é˜Ÿåˆ— 
+    sort(l, l + n, cmp); //ÅÅĞò  
+    //È¥ÖØ 
+    for(i = 0, j = 0; i < tol; i++) if(sgn(l[i].angle - l[j].angle) > 0) l[++j] = l[i];
+    //Ä£ÄâË«¶Ë¶ÓÁĞ 
     tol = j + 1, dq[0] = 0, dq[1] = 1, top = 1, bot = 0;
     for(i = 2; i < tol; i++){
-    	//åˆ¤æ–­æ–°åŠ å…¥ç›´çº¿äº§ç”Ÿçš„å½±å“
+    	//ÅĞ¶ÏĞÂ¼ÓÈëÖ±Ïß²úÉúµÄÓ°Ïì
         while(top > bot && judge(l[i], l[dq[top]], l[dq[top - 1]])) top--; 
         while(top > bot && judge(l[i], l[dq[bot]], l[dq[bot + 1]])) bot++; 
         dq[++top] = i;
     }
-    //æœ€ååˆ¤æ–­æœ€å…ˆåŠ å…¥çš„ç›´çº¿å’Œæœ€åçš„ç›´çº¿çš„å½±å“
+   //×îºóÅĞ¶Ï×îÏÈ¼ÓÈëµÄÖ±ÏßºÍ×îºóµÄÖ±ÏßµÄÓ°Ïì
     while(top > bot && judge(l[dq[bot]], l[dq[top]], l[dq[top - 1]])) top--;
     while(top > bot && judge(l[dq[top]], l[dq[bot]], l[dq[bot + 1]])) bot++;
     dq[++top] = dq[bot];
     for(pn = 0, i = bot; i < top; i++, pn++) p[pn] = getIntersect(l[dq[i + 1]], l[dq[i]]);
 }
 
-// åˆ©ç”¨å‰ä¹˜ è®¡ç®—å‡¸åŒ…é¢ç§¯   
+
+// ²æ»ı¼ÆËãÍ¹°üÃæ»ı   
 double getArea(){
     if(pn < 3) return 0;
     double area = 0;
@@ -102,7 +95,7 @@ double getArea(){
     return area / 2;
 }
 
-//åˆ¤æ–­è¾“å…¥ç‚¹çš„é¡ºåºï¼Œå¦‚æœé¢ç§¯ <0ï¼Œè¯´æ˜è¾“å…¥çš„ç‚¹ä¸ºé¡ºæ—¶é’ˆï¼Œå¦åˆ™ä¸ºé€†æ—¶é’ˆ
+//ÅĞ¶ÏÊäÈëµãµÄË³Ğò£¬Èç¹ûÃæ»ı <0£¬ËµÃ÷ÊäÈëµÄµãÎªË³Ê±Õë£¬·ñÔòÎªÄæÊ±Õë
 bool judge() {
   double ans = 0;
   for (int i = 1; i < n - 1; i++) {
@@ -111,7 +104,7 @@ bool judge() {
   return ans < 0;
 }
 
-
+//POJ 3335  POJ 1279
 int main(){
 	int T; 
 	scanf("%d", &T);
@@ -121,8 +114,7 @@ int main(){
 		for(int i = 0; i < n; i++){    
 			scanf("%lf %lf", &list[i].x, &list[i].y);
 		}
-		
-		if (judge()) {//åˆ¤æ–­è¾“å…¥é¡ºåºï¼Œä¿è¯é€†æ—¶é’ˆè¿è¾¹ã€‚
+		if (judge()) {//ÅĞ¶ÏÊäÈëË³Ğò£¬±£Ö¤ÄæÊ±ÕëÁ¬±ß
 	      		for (int i = 0; i < n; i++) {
 	        		addLine(l[tol++], list[(i + 1)%n], list[i]);
 	     		}
@@ -132,9 +124,15 @@ int main(){
 		    	}
     		}
 		HalfPlaneIntersect();
-		printf("%s\n", pn < 3 ? "NO" : "YES");	
+		//Êä³ö°ëÆ½Ãæ½»ÂÖÀªµã ×¢Òâ¿ÉÄÜ³öÏÖ-0.00 
+		for(int i=0;i<pn;i++){
+			printf("%lf %lf\n",p[i].x,p[i].y);
+		}
+		//POJ 3335  ÅĞ¶¨¶à±ßĞÎºËµÄ´æÔÚĞÔ pn>=3´ú±íÓĞÄÜ¿´µ½ËùÓĞ½ÇÂäµÄÎ»ÖÃ 
+		printf("%s\n", pn < 3 ? "NO" : "YES");
+		//POJ 1279  Çó¶à±ßĞÎµÄºËÃæ»ı
+		printf("%.2lf\n", getArea());	
 	}
-	
-	
 	return 0;
 } 
+
