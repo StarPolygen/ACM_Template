@@ -1,38 +1,53 @@
-#include<stdio.h>	//è‹¥bits/stdc++ listå’Œstackå‘½åä¼šäº§ç”Ÿambiguous 
+//Ê¹ÓÃÊ±ĞèÒª¼ì²é±ßµã ºÍcmp2£¿ 
+#include<stdio.h>	//Èôbits/stdc++ listºÍstackÃüÃû»á²úÉúambiguous  
 #include<math.h>
 #include<algorithm>
 #include<iostream>
-#define maxn 150010	//ç‚¹çš„æ•°é‡ 
-#define ll long long
+#define maxn 150010	//µãµÄÊıÁ¿ 
 using namespace std;
 
-struct P{
-	ll x;
-	ll y;
-} list[maxn];
 
-ll cross(P p0,P p1,P p2) //è®¡ç®—å‰ç§¯ : x1y2-x2y1   p0p1 X p0p2
+const double eps=1e-8;
+const double PI=acos(-1.0);
+
+
+//µãºÍ¾àÀë£º 
+struct Point{
+	double x;
+	double y;
+} list[maxn];
+double cross(Point p0,Point p1,Point p2) //¼ÆËã²æ»ı : x1y2-x2y1   p0p1 X p0p2
 {
     return (p1.x-p0.x)*(p2.y-p0.y)-(p1.y-p0.y)*(p2.x-p0.x);
 }   
-double dis(P p1,P p2){ //è·ç¦» 
+double dis(Point p1,Point p2){ //¾àÀë ¦» 
 	return sqrt((long double)(p1.x-p2.x)*(p1.x-p2.x)+(p1.y-p2.y)*(p1.y-p2.y));
 }
-ll disq(P p1,P p2){ //è·ç¦»å¹³æ–¹ 
-	return (p1.x-p2.x)*(p1.x-p2.x)+(p1.y-p2.y)*(p1.y-p2.y);
-}
+int sgn(double k) { return fabs(k) < eps ? 0 : (k > 0 ? 1 : -1); }
 
-//æè§’æ’åº
-//cross > 0 ä»£è¡¨ p0p2 å¯¹ p0p1ä¸ºé€†æ—¶é’ˆ   = 0 ä»£è¡¨ å¹³è¡Œ 
-bool cmp(P p1, P p2){		//è§’åº¦ç›¸åŒåˆ™è·ç¦»å°å‰
-	if(cross(list[0],p1,p2)>0) return true;
-	else if(cross(list[0],p1,p2)==0 && dis(list[0],p1) <= dis(list[0],p2)) return true;
+
+
+
+//Í¹°ü£º 
+//¼«½ÇÅÅĞò 1
+//cross > 0 ´ú±í p0p2 ¶Ô p0p1ÎªÄæÊ±Õë   = 0 ´ú±í Æ½ĞĞ  
+bool cmp(Point p1, Point p2){		//½Ç¶ÈÏàÍ¬Ôò¾àÀëĞ¡Ç°
+	if(sgn(cross(list[0],p1,p2))>0) return true;
+	else if(sgn(cross(list[0],p1,p2))==0 && dis(list[0],p1) <= dis(list[0],p2)) return true;
 	else return false;   
 } 
-
-//åˆå§‹åŒ–list[0] å·¦ä¸‹è§’ç‚¹  O(nlogn)
+// ¼«½ÇÅÅĞòº¯Êı2 ÔÚÅĞ¶ÏÎÈ¶¨Í¹°üÊ±Ê¹ÓÃ ÍêÈ«ÄæÊ±Õëº¬±ßµã 
+bool cmp2(Point p1,Point p2){
+    if(sgn(cross(list[0],p1,p2))>0) return true;
+    else if(sgn(cross(list[0],p1,p2))==0){
+        if(sgn(atan2(p1.y,p1.x)-PI/2)>=0) return dis(list[0],p1) > dis(list[0],p2);
+        else return dis(list[0],p1) < dis(list[0],p2);
+    }
+    else return false;
+}
+//³õÊ¼»¯list[0] ×óÏÂ½Çµã  O(nlogn)
 void init(int n){
-	P tmp; tmp=list[0]; int k=0;
+	Point tmp; tmp=list[0]; int k=0;
 	for(int i=1;i<n;i++){
 		if(list[i].y< tmp.y || (list[i].y== tmp.y && list[i].x < tmp.x)){
 			tmp = list[i];
@@ -41,11 +56,11 @@ void init(int n){
 	}
 	list[k]=list[0];
 	list[0]=tmp;
+	//´Ë´¦×¢ÒâÊ¹ÓÃcmp»¹ÊÇcmp2 
 	sort(list+1, list+n, cmp);
 } 
-
-//æ±‚è§£å‡¸åŒ… Graham-scan  O(n) 
-P stack[maxn]; int top=0;   //è£…å‡¸é›†çš„æ ˆ æ ˆé¡¶æŒ‡é’ˆ 0-top
+//Çó½âÍ¹°ü Graham-scan  O(n) 
+Point stack[maxn]; int top=0;    //×°Í¹¼¯µÄÕ» Õ»¶¥Ö¸Õë 0-top
 void graham(int n){
 	if(n==1) {
 		top=0; stack[0]=list[0];
@@ -56,27 +71,31 @@ void graham(int n){
 	}else{
 		for(int i=0;i<=1;i++) stack[i]=list[i]; top=1;
 		for(int i=2;i<n;i++){
-			while(top>0 && cross(stack[top-1],stack[top],list[i])<=0) top--;    // <0æ”¹æˆ<=0å³ä¸ºå°†å‡¸åŒ…è¾¹ä¸Šçš„ç‚¹è¸¢å‡º
+			while(top>0 && cross(stack[top-1],stack[top],list[i])<=0) top--;    // <0¸Ä³É<=0¼´Îª½«Í¹°ü±ßÉÏµÄµãÌß³ö
 			top++;
 			stack[top]=list[i];			
 		}		
 	}
 } 
 
-//æ—‹è½¬å¡å£³ å‡¸åŒ…ç›´å¾„ æœ€è¿œç‚¹å¯¹ O(n)
-//æ³¨æ„å‰”é™¤å‡¸åŒ…è¾¹ä¸Šçš„ç‚¹ 
-ll rotatingCalipers(){   
-	ll res=0;
-	if(top==1) {	//ä»…æœ‰ä¸¤ä¸ªç‚¹
-		return disq(stack[0],stack[1]);//disqæ˜¯è·ç¦»å¹³æ–¹ 
+
+
+
+//Ğı×ª¿¨¿Ç£º 
+//Í¹°üÖ±¾¶ ×îÔ¶µã¶Ô O(n)
+//×¢ÒâÌŞ³ıÍ¹°ü±ßÉÏµÄµã 
+double rotatingCalipers(){   
+	double res=0;
+	if(top==1) {	//½öÓĞÁ½¸öµã
+		return dis(stack[0],stack[1]);//disqÊÇ¾àÀëÆ½·½
 	}
 	else{
-		stack[++top]=stack[0];  //æŠŠç¬¬ä¸€ä¸ªç‚¹æ”¾åˆ°æœ€å
+		stack[++top]=stack[0];  //°ÑµÚÒ»¸öµã·Åµ½×îºó
 		int j=2;
-		for(int i=0;i<top;i++){  //æšä¸¾è¾¹ 
+		for(int i=0;i<top;i++){  //Ã¶¾Ù±ß 
 			while(cross(stack[i],stack[i+1],stack[j])<cross(stack[i],stack[i+1],stack[j+1]))
 				j= (j+1)%top;	 
-			res= max(res, max(disq(stack[i],stack[j]),disq(stack[i+1],stack[j])));
+			res= max(res, max(dis(stack[i],stack[j]),dis(stack[i+1],stack[j])));
 		}
 	}
 	return res;
@@ -84,15 +103,32 @@ ll rotatingCalipers(){
 
 
 
-int main(){
-	int n;
-	scanf("%d",&n);
-	for(int i=0;i<n;i++){
-		scanf("%lld%lld",&list[i].x,&list[i].y);	
-	}
-	init(n);  
-	graham(n);
-	ll ans= rotatingCalipers();
-	printf("%lld",ans);
-	return 0;
-} 
+//ADOJ EX7 
+//int main(){
+//	int n;
+//	scanf("%d",&n);
+//	for(int i=0;i<n;i++){
+//		scanf("%lf%lf",&list[i].x,&list[i].y);	
+//	}
+//	init(n);
+//	graham(n);
+//	Êä³öÍ¹¼¯ 
+//	for(int i=0;i<=top;i++){
+//		printf("%lf %lf\n",stack[i].x,stack[i].y);
+//	}
+//	printf("%d",top+1);
+//	return 0;
+//} 
+//POJ 2187
+//int main(){
+//	int n;
+//	scanf("%d",&n);
+//	for(int i=0;i<n;i++){
+//		scanf("%lf%lf",&list[i].x,&list[i].y);	
+//	}
+//	init(n);  
+//	graham(n);
+//	double ans= rotatingCalipers();
+//	printf("%.0lf",ans*ans);
+//	return 0;
+//} 

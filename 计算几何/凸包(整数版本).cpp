@@ -7,6 +7,8 @@
 #define ll long long
 using namespace std;
 const int MAXN=500010;  //点的数量 
+const double eps=1e-8;
+const double PI=acos(-1.0);
 
 struct point
 {

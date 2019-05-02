@@ -12,13 +12,9 @@
 
 using namespace std;
 const double eps = 1e-8;
-//消除精度 浮点数符号 
-int sgn(double x)
-{
-    if(fabs(x) < eps)return 0;
-    if(x < 0)return -1;
-    else return 1;
-}
+int sgn(double k) { return fabs(k) < eps ? 0 : (k > 0 ? 1 : -1); }
+
+//点： 加 减 乘 叉积   
 struct Point
 {
     double x,y;
@@ -41,6 +37,8 @@ struct Point
         return x*b.x + y*b.y;
     }
 };
+
+//线  位置关系  交点求解   
 struct Line
 {
     Point s,e;
@@ -64,6 +62,12 @@ struct Line
         return make_pair(res,2);//有交点
     }
 };
+
+
+
+
+
+//POJ 1269
 int main()
 {
     //freopen("in.txt","r",stdin);
