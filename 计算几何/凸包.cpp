@@ -1,3 +1,5 @@
+//凸集点储存在l[stack[0-top]]中  凸包上点数为top+1
+//注意是否需要边点 
 #include<stdio.h>
 #include<math.h>
 #include<algorithm>
