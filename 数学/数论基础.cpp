@@ -16,7 +16,7 @@
 
 '1. 欧几里得    
 //有负数时会以绝对值较大的数的符号  作为gcd的符号 
-inline int gcd(int a,int b)
+inline ll gcd(ll a,ll b)
 {
     return b?gcd(b,a%b):a;
 } 
@@ -96,20 +96,6 @@ ll bin(ll x, ll n, ll mod) {
 
 '5. 快速乘 
 //基于快速幂O(logn)   相乘爆ll时需要使用 
-ll fast_multi(ll m, ll n, ll mod)//快速乘法 
-{
-    ll ans = 0;//注意初始化是0，不是1 
-    while (n)
-    {
-        if (n & 1)
-            ans += m;
-        m = (m + m) % mod;//和快速幂一样，只不过这里是加 
-        m %= mod;//取模，不要超出范围 
-        ans %= mod;
-        n >>= 1;
-    }
-    return ans;
-}//版本2 
 ll mul(ll a, ll b, ll m) {
     ll ret = 0;
     while (b) {
@@ -123,16 +109,10 @@ ll mul(ll a, ll b, ll m) {
     }
     return ret;
 }
-//O(1)快速乘
-//模数较大时可能会出锅 不过出锅概率很小 
-inline ll ksc(ll x,ll y,ll p){
-    ll z=(ld)x/p*y;
-    ll res=(ull)x*y-(ull)z*p;
-    return (res+p)%p;
-} //版本2 
+//O(1)快速乘 
 ll mul(ll u, ll v, ll p) {
     return (u * v - ll((long double) u * v / p) * p + p) % p;
-}//版本3 卡常 
+}
 ll mul(ll u, ll v, ll p) { // 卡常
     ll t = u * v - ll((long double) u * v / p) * p;
     return t < 0 ? t + p : t;
