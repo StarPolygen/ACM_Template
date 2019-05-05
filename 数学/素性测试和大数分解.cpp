@@ -1,6 +1,6 @@
 //Miller-Rabin O(klogn^3)
 //素数测试
-//不保证正确 但正确率在5个底即可达到99% 
+//不保证正确 但在5个底正确率即可达到99% 
 //前置： 快速乘、快速幂
 //int 范围内只需检查 2, 7, 61
 //long long 范围 2, 325, 9375, 28178, 450775, 9780504, 1795265022
@@ -43,7 +43,10 @@ ll pollard_rho(ll n, ll c) {
     }
 }
 
-ll fac[100], fcnt;//素因子及个数 
+ll fac[100], fcnt;
+//得到的因子在0-（fcnt-1）
+//保留重复质因子 但质因子顺序无法保证 需要排序 
+//注意重复调用时需要清空 
 void get_fac(ll n, ll cc = 19260817) {
     if (n == 4) { fac[fcnt++] = 2; fac[fcnt++] = 2; return; }
     if (primeQ(n)) { fac[fcnt++] = n; return; }

@@ -54,7 +54,7 @@ ll ex_gcd(ll a, ll b, ll &x, ll &y) {
 
 
 
-'筛 
+'3. 筛 
 //朴素线性筛
 int Mark[MAXSIZE];  
 int prime[MAXSIZE];    //判断是否是一个素数  Mark 标记数组 index 素数个数  
@@ -78,7 +78,7 @@ int Prime(){
 
 
 
-"4. 快速幂"
+'4. 快速幂
 //当相乘会爆long long 时需要配合快速乘使用  将乘法替换为快速乘 
 ll bin(ll x, ll n, ll mod) {
     ll ret = mod != 1;
