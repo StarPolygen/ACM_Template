@@ -6,9 +6,9 @@
 '5. 快速乘                    O(1)快速乘  卡常快速乘 
 '6. 阶乘逆元
 '7. 组合数                    (逆元、Lucas） 
-'8. 牛顿法迭代求根 
-
-
+'8. 牛顿法迭代求根  
+'9. 质因数分解 
+'10. 原根 
 
 
 
@@ -54,16 +54,16 @@ ll ex_gcd(ll a, ll b, ll &x, ll &y) {
 
 
 
-'3. 筛 
-//朴素线性筛
-int Mark[MAXSIZE];  
+'3. 素数筛 
+//素数筛 
+const int MAXSIZE; 
+int Mark[MAXSIZE];     //prime[0]起 
 int prime[MAXSIZE];    //判断是否是一个素数  Mark 标记数组 index 素数个数  
-
 int Prime(){	
 	int index=0;
     for (int i = 2; i < MAXSIZE; i++){
         if(Mark[i]) continue;//如标记则跳过  
-        prime[++index] = i;//否则得到一个素数
+        prime[index++] = i;//否则得到一个素数
         for (int j = i + i; j < MAXSIZE; j += i) Mark[j] = 1;//标记目前得到的素数的i倍为非素数
     }
     return index;
@@ -211,6 +211,67 @@ ll sqrt(ll x) {
     }
     return ll(res);
 } 
+
+
+
+
+
+
+
+'9. 质因数分解
+//前置模板：素数筛
+//带指数 
+ll factor[30], f_sz, factor_exp[30];
+void get_factor(ll x) {
+    f_sz = 0;
+    ll t = sqrt(x + 0.5);
+    for (ll i = 0; pr[i] <= t; ++i)
+        if (x % pr[i] == 0) {
+            factor_exp[f_sz] = 0;
+            while (x % pr[i] == 0) {
+                x /= pr[i];
+                ++factor_exp[f_sz];
+            }
+            factor[f_sz++] = pr[i];
+        }
+    if (x > 1) {
+        factor_exp[f_sz] = 1;
+        factor[f_sz++] = x;
+    }
+}
+//不带指数
+ll factor[30], f_sz;
+void get_factor(ll x) {
+    f_sz = 0;
+    ll t = sqrt(x + 0.5);
+    for (ll i = 0; pr[i] <= t; ++i)
+        if (x % pr[i] == 0) {
+            factor[f_sz++] = pr[i];
+            while (x % pr[i] == 0) x /= pr[i];
+        }
+    if (x > 1) factor[f_sz++] = x;
+} 
+
+
+
+
+
+'10. 原根
+//前置模板：素数筛，快速幂，分解质因数
+//要求 p 为质数 
+ll find_smallest_primitive_root(ll p) {
+    get_factor(p - 1);
+    FOR (i, 2, p) {
+        bool flag = true;
+        FOR (j, 0, f_sz)
+            if (bin(i, (p - 1) / factor[j], p) == 1) {
+                flag = false;
+                break;
+            }
+        if (flag) return i;
+    }
+    assert(0); return -1;
+}
 
 
 
