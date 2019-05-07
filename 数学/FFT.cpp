@@ -1,10 +1,24 @@
-//FFT  
-//n需补成 2 的幂 （n必须超过 a 和 b 的最高指数之和）
-//卷积系数储存在a[i].real()中,作为整数使用时需要（ll）(a[i].real()+0.5) 
+//FFT 
 #include <bits/stdc++.h>
 #define ll long long
 #define maxn 100010
 #include <complex>
+//复数定义
+struct Complex{
+    double x, y;
+    inline Complex operator+(const Complex b) const {
+        return (Complex){x +b.x,y + b.y};
+    }
+    inline Complex operator-(const Complex b) const {
+        return (Complex){x -b.x,y - b.y};
+    }
+    inline Complex operator*(const Complex b) const {
+        return (Complex){x *b.x -y * b.y,x * b.y + y * b.x};
+    }
+} 
+
+//n需补成 2 的幂 （n必须超过 a 和 b 的最高指数之和）
+//卷积系数储存在a[i].real()中,作为整数使用时需要（ll）(a[i].real()+0.5) 
 using namespace std;
 typedef complex<double> cd;
 //！！nlogn的最大长度，需要根据题意计算和修改	
