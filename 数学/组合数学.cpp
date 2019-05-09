@@ -137,7 +137,7 @@ void init_catalan2(){
 
 
 
-'5. 二项式
+'5. 二项式/组合数 
 vector<ll> binomial[MAXN];
 void init_binomial()
 {
