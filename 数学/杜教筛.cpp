@@ -1,4 +1,5 @@
-//杜教筛套路式： g(1)S(n)=∑i=1-n h(i) —∑d=2-n g(d)S(n/d) 
+//杜教筛
+//套路式： g(1)S(n)=∑i=1-n h(i) —∑d=2-n g(d)S(n/d) 
 //首先先线筛出数据范围根号左右的积性函数的前缀和。再递归的实现杜教筛。
 //用stl中的unordered_map，而不是map
 //尽量减少取模和longlong  如unordered_map 
@@ -59,6 +60,8 @@ void get(int maxn){
 ll mul(ll a,ll b){
 	return (a*b)%mod;
 }
+
+
 //杜教筛 
 tr1::unordered_map<ll,int> mp;
 long long djsf(ll n)

@@ -16,18 +16,15 @@ void get_mu()
 	mu[1] = 1;
 	static bool vis[p_max];
 	mu[1] = 1;
-	for (int i = 2; i < p_max; i++)
-	{
+	for (int i = 2; i < p_max; i++)	{
 		if (!vis[i])
 		{
 			prime[p_sz++] = i;
 			mu[i] = -1;
 		}
-		for (ll j = 0; j < p_sz && (d = i * prime[j]) < p_max; ++j)
-		{
+		for (ll j = 0; j < p_sz && (d = i * prime[j]) < p_max; ++j)		{
 			vis[d] = 1;
-			if (i % prime[j] == 0)
-			{
+			if (i % prime[j] == 0)			{
 				mu[d] = 0;
 				break;
 			}
@@ -38,7 +35,7 @@ void get_mu()
 }
 
 
-//预处理 这部分不属于模板
+//预处理 这部分因题而异不属于模板
 ll mutp[maxn];
 ll prefix[maxn];
 void pre()
