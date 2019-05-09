@@ -4,11 +4,9 @@
 '3. 筛                        线性筛 欧拉筛 莫比乌斯筛 
 '4. 快速幂 
 '5. 快速乘                    O(1)快速乘  卡常快速乘 
-'6. 阶乘逆元
-'7. 组合数                    (逆元、Lucas） 
-'8. 牛顿法迭代求根  
-'9. 质因数分解 
-'10. 原根 
+'6. 牛顿法迭代求根  
+'7. 质因数分解 
+'8. 原根 
 
 
 
@@ -166,84 +164,7 @@ ll mul(ll u, ll v, ll p) { // 卡常
 
 
 
-
-
-'6. 阶乘和逆元
-//逆元   快速幂版 适用于P为素数 
-inline ll get_inv(ll x, ll p) { return bin(x, p - 2, p); }
-//逆元   Exgcd版  适用于P不为素数 
-ll get_inv2(ll a, ll M) {
-    static ll x, y;
-    assert(ex_gcd(a, M, x, y) == 1);
-    return (x % M + M) % M;
-} 
-//预处理逆元
-void inv_init(ll n, ll p) {
-    inv[1] = 1;
-    for(int i=2;i<=n;i++)
-        inv[i] = (p - p / i) * inv[p % i] % p;
-} 
-//阶乘逆元 
-void fact() {
-    fac[0]=1;
-    for(int i=1;i<=maxn;i++) {
-        fac[i]=(fac[i-1]*i) % mod;  //阶乘取余打表
-    }
-    //切记,求阶乘逆元时maxn最大值为mod-1，因为求逆元的数（此处为n!）要和mod互质才存在逆元。
-    invf[maxn] = bin(fac[maxn], mod-2 , mod);  //最大阶乘逆元
-    for(int i=maxn-1;i>=0;i--) {
-        invf[i]=(invf[i+1]*(i+1))%mod;  //递推阶乘逆元
-    }
-}
-
-
-
-
-
-
-
-
-'7. 组合数
-/*
-前置模板：逆元-阶乘逆元
-如果数较小，模较大时使用逆元*/
-inline ll C(ll n, ll m) { // n >= m >= 0
-    return n < m || m < 0 ? 0 : fac[n] * invf[m] % mod * invf[n - m] % mod;
-}
-/*
-如果模数较小，数字较大，使用 Lucas 定理
-前置模板可选1：求组合数 （如果使用阶乘逆元，需fac_inv_init(mod, mod);）
-前置模板可选2：模数不固定下使用，无法单独使用。*/
-ll C(ll n, ll m) { // m >= n >= 0
-    if (m - n < n) n = m - n;
-    if (n < 0) return 0;
-    ll ret = 1;
-    for (int i=1; i<=n ;i++)
-        ret = ret * (m - n + i) % mod * bin(i, mod - 2, mod) % mod;
-    return ret;
-}
-ll Lucas(ll n, ll m) { // m >= n >= 0
-    return m ? C(n % mod, m % mod) * Lucas(n / mod, m / mod) % mod : 1;
-}
-//组合数预处理
-ll C[M][M];
-void init_C(int n) {
-    for(int i=0; i<n; i++) {
-        C[i][0] = C[i][i] = 1;
-        for(int j=1; j<i; j++)
-            C[i][j] = (C[i - 1][j] + C[i - 1][j - 1]) % mod;
-    }
-}
-
-
-
-
-
-
-
-
-
-'8. 牛顿迭代法求根
+'6. 牛顿迭代法求根
 ll sqrt(ll x) {
     if (x == 0) return 0;
     double last = 0;
@@ -262,7 +183,7 @@ ll sqrt(ll x) {
 
 
 
-'9. 质因数分解
+'7. 质因数分解
 //前置模板：素数筛
 //带指数 
 ll factor[30], f_sz, factor_exp[30];
@@ -300,7 +221,7 @@ void get_factor(ll x) {
 
 
 
-'10. 原根
+'8. 原根
 //前置模板：素数筛，快速幂，分解质因数
 //要求 p 为质数 
 ll find_smallest_primitive_root(ll p) {

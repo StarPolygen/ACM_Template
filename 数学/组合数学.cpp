@@ -1,73 +1,99 @@
-//组合数学 
-//1.阶乘打表 阶乘逆元 
-//2.错排 
-//3.卡特兰数
-//4.第一二类斯特灵数 
-//5.贝尔三角形 贝尔数 
-
-#include <bits/stdc++.h>
-using namespace std;
-typedef long long ll;
-#define rep(i, n) for (ll i = 0; (i) < (n); (i)++)
-#define _rep(i, n) for (ll i = 1; (i) <= (n); (i)++)
-#define MOD 0x3b9aca07
-#define MAXN 200050
-#define TYPE ll
+'目录：
+'1. 阶乘和逆元
+'2. 组合数 		 阶乘逆元   Lucas定理   
+'3. 错排		
+'4. 卡特兰数	 
+'5. 二项式系数 
+'6. 斯特灵数	 第一类斯特灵数  第二类斯特灵数 
+'7. 贝尔数       贝尔三角形 贝尔数 
+ 
 
 
-
-//阶乘打表 
-ll factorial[MAXN];
-void init_factorial()
-{
-    factorial[0] = 1;
-#ifdef MOD
-    for (ll i = 1; i < MAXN; i++)
-        factorial[i] = i * factorial[i - 1] % MOD;
-#else
-    for (ll i = 1; i < MAXN && i <= 20; i++)
-        factorial[i] = i * factorial[i - 1];
-    //MAXIMUM 20 for long long
-#endif
-}
-
-
-
+'1. 阶乘和逆元
+//逆元   快速幂版 适用于P为素数 
+inline ll get_inv(ll x, ll p) { return bin(x, p - 2, p); }
+//逆元   Exgcd版  适用于P不为素数 
+ll get_inv2(ll a, ll M) {
+    static ll x, y;
+    assert(ex_gcd(a, M, x, y) == 1);
+    return (x % M + M) % M;
+} 
+//预处理逆元
+void inv_init(ll n, ll p) {
+    inv[1] = 1;
+    for(int i=2;i<=n;i++)
+        inv[i] = (p - p / i) * inv[p % i] % p;
+} 
 //阶乘逆元 
-#ifdef MOD
-ll mod_inverse[MAXN];
-ll factorial_inverse[MAXN];
-void init_factorial_inverse()
-{
-    mod_inverse[0] = 0, factorial_inverse[0] = mod_inverse[1] = 1;
-    for (ll i = 2; i < MAXN; i++)
-        mod_inverse[i] = (MOD - MOD / i) * mod_inverse[MOD % i] % MOD;
-    for (ll i = 1; i < MAXN; i++)
-        factorial_inverse[i] = factorial_inverse[i - 1] * mod_inverse[i] % MOD;
+void fact() {
+    fac[0]=1;
+    for(int i=1;i<=maxn;i++) {
+        fac[i]=(fac[i-1]*i) % mod;  //阶乘取余打表
+    }
+    //切记,求阶乘逆元时maxn最大值为mod-1，因为求逆元的数（此处为n!）要和mod互质才存在逆元。
+    invf[maxn] = bin(fac[maxn], mod-2 , mod);  //最大阶乘逆元
+    for(int i=maxn-1;i>=0;i--) {
+        invf[i]=(invf[i+1]*(i+1))%mod;  //递推阶乘逆元
+    }
 }
-#endif
 
 
 
-//错排 
+
+
+
+
+'2. 组合数
+/*
+前置模板：逆元-阶乘逆元
+如果数较小，模较大时使用逆元*/
+inline ll C(ll n, ll m) { // n >= m >= 0
+    return n < m || m < 0 ? 0 : fac[n] * invf[m] % mod * invf[n - m] % mod;
+}
+/*
+如果模数较小，数字较大，使用 Lucas 定理
+前置模板可选1：求组合数 （如果使用阶乘逆元，需fac_inv_init(mod, mod);）
+前置模板可选2：模数不固定下使用，无法单独使用。*/
+ll C(ll n, ll m) { // m >= n >= 0
+    if (m - n < n) n = m - n;
+    if (n < 0) return 0;
+    ll ret = 1;
+    for (int i=1; i<=n ;i++)
+        ret = ret * (m - n + i) % mod * bin(i, mod - 2, mod) % mod;
+    return ret;
+}
+ll Lucas(ll n, ll m) { // m >= n >= 0
+    return m ? C(n % mod, m % mod) * Lucas(n / mod, m / mod) % mod : 1;
+}
+//组合数预处理
+ll C[M][M];
+void init_C(int n) {
+    for(int i=0; i<n; i++) {
+        C[i][0] = C[i][i] = 1;
+        for(int j=1; j<i; j++)
+            C[i][j] = (C[i - 1][j] + C[i - 1][j - 1]) % mod;
+    }
+}
+
+
+
+
+
+
+'3. 错排 
 ll derangement[MAXN];
-void init_derangement()
-{
+void init_derangement() {
     derangement[1] = 0, derangement[0] = derangement[2] = 1;
-#ifdef MOD
     for (ll i = 3; i < MAXN; i++)
         derangement[i] = (derangement[i - 1] + derangement[i - 2]) % MOD * (i - 1) % MOD;
-#else
-    for (ll i = 3; i < MAXN && i <= 20; i++)
-        derangement[i] = (derangement[i - 1] + derangement[i - 2]) * (i - 1);
-    //MAXIMUM 20 for long long
-#endif
 }
 
 
 
 
-//卡特兰数 
+
+'4. 卡特兰数 
+//卡特兰数1
 ll catalan[MAXN];
 #ifdef MOD
 ll mod_inverse[MAXN];
@@ -89,26 +115,9 @@ void init_catalan()
     // MAXIMUM 35 for long long
 #endif
 }
-
-
-TYPE catalan[MAXN];
-void init_catalan()
-{
-    catalan[1] = 1;
-    for (ll i = 2; i < MAXN; i++)
-    {
-#ifdef MOD
-        catalan[i] = catalan[i - 1] * (4 * i - 2) / (i + 1) % MOD;
-#else
-        catalan[i] = catalan[i - 1] * (4 * i - 2) / (i + 1);
-#endif
-    }
-}
-
-
+//卡特兰数2
 vector<TYPE> catalan[MAXN]; // catalan[in_stack][out_stack]
-void init_catalan()
-{
+void init_catalan2(){
     for (ll i = 0; i < MAXN; i++)
         catalan[i] = vector<TYPE>((unsigned) i + 1, 1);
     for (ll i = 1; i < MAXN; i++)
@@ -126,12 +135,14 @@ void init_catalan()
 }
 
 
-//二项式 
-vector<TYPE> binomial[MAXN];
+
+
+'5. 二项式
+vector<ll> binomial[MAXN];
 void init_binomial()
 {
     for (ll i = 0; i < MAXN; i++)
-        binomial[i] = vector<TYPE>((unsigned) i + 1, 1);
+        binomial[i] = vector<ll>((unsigned) i + 1, 1);
     for (ll i = 1; i < MAXN; i++)
     {
         for (ll j = 1; j < i; j++)
@@ -143,74 +154,28 @@ void init_binomial()
 #endif
         }
     }
-}
+} 
 
 
+'6. 斯特灵数 
 //第一类斯特灵数 
-vector<TYPE> stirling_first[MAXN];
-void init_stirling_first()
-{
-    for (ll i = 0; i < MAXN; i++)
-        stirling_first[i] = vector<TYPE>((unsigned) i + 1, 0);
-    for (ll i = 1; i < MAXN; i++)
-    {
-        for (ll j = 1; j < i; j++)
-        {
-#ifdef MOD
-            stirling_first[i][j] = ((i - 1) * stirling_first[i - 1][j] % MOD + stirling_first[i - 1][j - 1]) % MOD;
-#else
-            stirling_first[i][j] = (i - 1) * stirling_first[i - 1][j] + stirling_first[i - 1][j - 1];
-#endif
-        }
-        stirling_first[i][i] = (TYPE) 1;
-    }
+ll S[MAXN][MAXN];
+void init_stirling_first(){
+    S[0][0] = 1;
+    for (int i=1; i< MAXN;i++)
+        for (int j=1; j<i + 1; j++) S[i][j] = (S[i - 1][j - 1] + (i - 1) * S[i - 1][j]) % MOD;
 }
-
-//第二类斯特灵数 
-vector<TYPE> stirling_second[MAXN];
-void init_stirling_second()
-{
-    for (ll i = 0; i < MAXN; i++)
-        stirling_second[i] = vector<TYPE>((unsigned) i + 1, 0);
-    for (ll i = 1; i < MAXN; i++)
-    {
-        for (ll j = 1; j < i; j++)
-        {
-#ifdef MOD
-            stirling_second[i][j] = (j * stirling_second[i - 1][j] % MOD + stirling_second[i - 1][j - 1]) % MOD;
-#else
-            stirling_second[i][j] = j * stirling_second[i - 1][j] + stirling_second[i - 1][j - 1];
-#endif
-        }
-        stirling_second[i][i] = (TYPE) 1;
-    }
+//第二类斯特灵数
+ll S[MAXN][MAXN];
+void init_stirling_second(){
+    S[0][0] = 1;
+    for (int i=1; i< MAXN;i++)
+        for (int j=1; j<i + 1; j++) S[i][j] = (S[i - 1][j - 1] + j * S[i - 1][j]) % MOD;
 }
 
 
-//第二类斯特灵数 
-ll powmod(ll a,ll b) {ll r = 1; a %= MOD; for(; b; b >>= 1) {if (b & 1) r = r * a % MOD; a = a * a % MOD;} return r;}
-ll modinv[MAXN];
-ll fa_inv[MAXN];
-ll f[] = {1, -1};
 
-ll init_stirling()
-{
-    modinv[0] = 0, modinv[1] = 1;
-    for (ll i = 2; i < MAXN; i++) modinv[i] = (MOD - MOD / i) * modinv[MOD % i] % MOD;
-    fa_inv[0] = 1;
-    for (ll i = 1; i < MAXN; i++) fa_inv[i] = fa_inv[i - 1] * modinv[i] % MOD;
-}
-
-ll stirling(ll n, ll m)
-{
-    ll r = 0;
-    if (n >= m)
-        for (ll i = 0; i < m + 1; i++)
-            r = (r + f[i & 1] * fa_inv[m - i] * fa_inv[i] % MOD * powmod(m - i, n)) % MOD;
-    return r;
-}
-
-
+'7. 贝尔数 
 // 贝尔三角形 
 vector<TYPE> bell[MAXN]; // bell(i) = bell[i][i]
 void init_bell()
