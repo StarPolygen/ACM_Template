@@ -9,6 +9,7 @@
  
 
 
+
 '1. 阶乘和逆元
 //逆元   快速幂版 适用于P为素数 
 inline ll get_inv(ll x, ll p) { return bin(x, p - 2, p); }
@@ -65,6 +66,7 @@ ll C(ll n, ll m) { // m >= n >= 0
 ll Lucas(ll n, ll m) { // m >= n >= 0
     return m ? C(n % mod, m % mod) * Lucas(n / mod, m / mod) % mod : 1;
 }
+
 //组合数预处理
 ll C[M][M];
 void init_C(int n) {
@@ -74,7 +76,24 @@ void init_C(int n) {
             C[i][j] = (C[i - 1][j] + C[i - 1][j - 1]) % mod;
     }
 }
-
+//二项式系数，也是组合数 
+vector<ll> binomial[MAXN];
+void init_binomial()
+{
+    for (ll i = 0; i < MAXN; i++)
+        binomial[i] = vector<ll>((unsigned) i + 1, 1);
+    for (ll i = 1; i < MAXN; i++)
+    {
+        for (ll j = 1; j < i; j++)
+        {
+#ifdef MOD
+            binomial[i][j] = (binomial[i - 1][j] + binomial[i - 1][j - 1]) % MOD;
+#else
+            binomial[i][j] = binomial[i - 1][j] + binomial[i - 1][j - 1];
+#endif
+        }
+    }
+} 
 
 
 
@@ -92,7 +111,7 @@ void init_derangement() {
 
 
 
-'4. 卡特兰数 
+'4. 卡特兰数   1 1 2 5 14 42 132 429 1430 4862 16796 58786 （0开始） 
 //卡特兰数1
 ll catalan[MAXN];
 #ifdef MOD
@@ -137,24 +156,10 @@ void init_catalan2(){
 
 
 
-'5. 二项式/组合数 
-vector<ll> binomial[MAXN];
-void init_binomial()
-{
-    for (ll i = 0; i < MAXN; i++)
-        binomial[i] = vector<ll>((unsigned) i + 1, 1);
-    for (ll i = 1; i < MAXN; i++)
-    {
-        for (ll j = 1; j < i; j++)
-        {
-#ifdef MOD
-            binomial[i][j] = (binomial[i - 1][j] + binomial[i - 1][j - 1]) % MOD;
-#else
-            binomial[i][j] = binomial[i - 1][j] + binomial[i - 1][j - 1];
-#endif
-        }
-    }
-} 
+'5. 超级卡特兰数    	1, 1, 3, 11, 45, 197, 903, 4279, 20793, 103049（0开始）  
+						F(n)*(n+1) = (6*n-3)F(n-1) - (n-2)F(n-2)
+   '施罗德数		 	1, 2, 6, 22, 90, 394, 1806, 8558, 41586, 206098
+					'	除第一项外其他项为超级卡特兰的2倍 因此可由超级卡特兰计算 
 
 
 '6. 斯特灵数 
@@ -175,7 +180,7 @@ void init_stirling_second(){
 
 
 
-'7. 贝尔数 
+'7. 贝尔数 		  1 1 2 5 15 52 203	 
 // 贝尔三角形 
 vector<TYPE> bell[MAXN]; // bell(i) = bell[i][i]
 void init_bell()
