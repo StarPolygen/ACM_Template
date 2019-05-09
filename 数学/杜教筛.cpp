@@ -1,9 +1,16 @@
+//杜教筛套路式： g(1)S(n)=∑i=1-n h(i) —∑d=2-n g(d)S(n/d) 
+//首先先线筛出数据范围根号左右的积性函数的前缀和。再递归的实现杜教筛。
+//用stl中的unordered_map，而不是map
+//尽量减少取模和longlong  如unordered_map 
+
 #include<bits/stdc++.h>
 #include<tr1/unordered_map>
 #define N 5001000
 #define mod 1000000007
 #define ll long long
 using namespace std;
+
+//快读 
 template<typename T>inline void read(T &x)
 {
     x=0;
@@ -13,18 +20,17 @@ template<typename T>inline void read(T &x)
     while(isdigit(c)) {x=(x<<1)+(x<<3)+(c-48);c=getchar();}
     x*=p;
 }
-//杜教筛题目的关键是寻找配凑h和g 使得h=f*g 
-long long f[N],sum[N];
 
+
+//杜教筛题目的关键是寻找配凑h和g 使得h=f*g   1.消去  2.试凑 
+long long f[N];
 
 
 //快速幂 求逆元 
 int inv3;
-ll fast_exp(ll a,ll b,ll c)
-{
+ll fast_exp(ll a,ll b,ll c){
     ll res=1;
-    while(b)
-    {
+    while(b)    {
         if(b&1){
             res=res*a%c;
         }
@@ -35,8 +41,7 @@ ll fast_exp(ll a,ll b,ll c)
 }
 
 //暴力求解前根号n待求积性函数的前缀和 ，get内的代码不具有普适性 
-void get(int maxn)
-{
+void get(int maxn){
 	for(int i=1;i<=maxn;++i){
         f[i]=(f[i]+(1LL*i*i-3*i+2));
         for(int j=2*i;j<=maxn;j+=i){
@@ -72,14 +77,12 @@ long long djsf(ll n)
 
 }
 
-int main()
-{
+int main(){
     int t;
     read(t);
     inv3=fast_exp(3,mod-2,mod);
     get(1e6);
-    while(t--)
-    {
+    while(t--)    {
         static int n;
         read(n);
         printf("%lld\n",djsf(n));
