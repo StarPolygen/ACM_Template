@@ -24,7 +24,7 @@ inline ll get_inv(ll x, ll p) { return bin(x, p - 2, p); }
 
 
 
-//NTT
+//NTT	NTT结果将会保存在第一个原始数组f内，并将原始数据覆盖掉
 const int maxl = maxn<<2; 
 int rev[maxl];
 void NTT(int *a,int len,int f){//此处的len是已经对齐的，对齐工作在mul里完成
@@ -54,7 +54,7 @@ void mul(int *a,int *b,int n){//此处的参数n为原始数组的有用长度之和
 	NTT(a,len,-1);
 }
 
-//原始数组要求长度也为maxl,最终结果在f内 
+//NNT直接对原始数组操作，因此原始数组大小为maxl,最终结果在f内 
 int f[maxl],g[maxl];
 int main(){
 	return 0;
