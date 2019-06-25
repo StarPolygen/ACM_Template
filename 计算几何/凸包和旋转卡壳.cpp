@@ -33,15 +33,16 @@ int sgn(double k) { return fabs(k) < eps ? 0 : (k > 0 ? 1 : -1); }
 //cross > 0 代表 p0p2 对 p0p1为逆时针   = 0 代表 平行  
 bool cmp(Point p1, Point p2){		//角度相同则距离小前
 	if(sgn(cross(list[0],p1,p2))>0) return true;
-	else if(sgn(cross(list[0],p1,p2))==0 && dis(list[0],p1) <= dis(list[0],p2)) return true;
+	else if(sgn(cross(list[0],p1,p2))==0 && sgn(dis(list[0],p1) - dis(list[0],p2))<=0) return true;
 	else return false;   
 } 
+
 // 极角排序函数2 在判断稳定凸包时使用 完全逆时针含边点 
 bool cmp2(Point p1,Point p2){
     if(sgn(cross(list[0],p1,p2))>0) return true;
     else if(sgn(cross(list[0],p1,p2))==0){
-        if(sgn(atan2(p1.y,p1.x)-PI/2)>=0) return dis(list[0],p1) > dis(list[0],p2);
-        else return dis(list[0],p1) < dis(list[0],p2);
+        if(sgn(atan2((double)p1.y,(double)p1.x)-PI/2)>0) return sgn(dis(list[0],p1)-dis(list[0],p2))>0;
+        else return sgn(dis(list[0],p1) - dis(list[0],p2))<0;
     }
     else return false;
 }
