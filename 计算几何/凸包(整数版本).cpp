@@ -1,14 +1,22 @@
 //凸集点储存在l[stack[0-top]]中  凸包上点数为top+1
 //注意是否需要边点 
-#include<stdio.h>
-#include<math.h>
-#include<algorithm>
-#include<iostream>
+#include <iostream>
+#include <stdio.h>
+#include <string.h>
+#include <algorithm>
+#include <queue>
+#include <map>
+#include <vector>
+#include <set>
+#include <string>
+#include <math.h>
 #define ll long long
+#define MAXN 55
 using namespace std;
-const int MAXN=500010;  //点的数量 
-const double eps=1e-8;
+const double eps = 1e-8;
 const double PI=acos(-1.0);
+int sgn(double k) { return fabs(k) < eps ? 0 : (k > 0 ? 1 : -1); }
+const int MAXN=500010;  //点的数量 
 
 struct point
 {
@@ -37,24 +45,17 @@ bool cmp(point p1,point p2)
 {
     ll tmp=cross(list[0],p1,p2);
     if(tmp>0) return true;
-    else if(tmp==0&&dis(list[0],p1)<dis(list[0],p2)) return true;
+    else if(tmp==0&&sgn(dis(list[0],p1)-dis(list[0],p2))<0) return true;
     else return false;
 }  
-
-//消除精度影响 的浮点数判断正负性
-int dblcmp(double k) {
-    if (fabs(k) < eps) return 0;
-    return k > 0 ? 1 : -1;
-}
-
 // 极角排序函数2 在判断稳定凸包时使用 
 // 最终产生的 凸集内的点 完全按照逆时针排列 
 bool cmp2(point p1,point p2){
     ll tmp=cross(list[0],p1,p2);
     if(tmp>0) return true;
     else if(tmp==0){
-        if(dblcmp(atan2((double)p1.y,(double)p1.x)-PI/2)>=0) return dis(list[0],p1)>dis(list[0],p2);
-        else return dis(list[0],p1)<dis(list[0],p2);
+        if(sgn(atan2((double)p1.y,(double)p1.x)-PI/2)>0) return sgn(dis(list[0],p1)-dis(list[0],p2))>0;
+        else return sgn(dis(list[0],p1)-dis(list[0],p2))<0;
     }
     else return false;
 }
