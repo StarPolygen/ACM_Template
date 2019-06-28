@@ -1,4 +1,6 @@
-# 1
+//树状数组模板
+//注意填充D、C、jmC时必须使用add方法 
+# 1 单点修改,区间查询 
 const int maxn=50010; //maxn代表总区间中的点数 
 int D[maxn];
 int lowbit(int x){return x&(-x);}
@@ -20,7 +22,7 @@ int query(int L,int R){
 	return querypf(R)-querypf(L-1);
 }
 
-# 2
+# 2 区间修改,区间查询 
 const int maxn=100010; //maxn代表总区间中的点数 
 LL lowbit(LL x){return x&(-x);}
 void add(LL* arr,int x,int k,int n){
