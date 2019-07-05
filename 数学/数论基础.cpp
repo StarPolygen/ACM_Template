@@ -5,7 +5,7 @@
 '4. 快速幂 
 '5. 快速乘                    O(1)快速乘  卡常快速乘 
 '6. 牛顿法迭代求根  
-'7. 质因数分解 
+'7. 质因数分解 / 全因数分解 
 '8. 原根 
 
 
@@ -183,7 +183,7 @@ ll sqrt(ll x) {
 
 
 
-'7. 质因数分解
+'7. 质因数分解 /全因数分解 
 //前置模板：素数筛
 //带指数 
 ll factor[30], f_sz, factor_exp[30];
@@ -216,6 +216,17 @@ void get_factor(ll x) {
         }
     if (x > 1) factor[f_sz++] = x;
 } 
+
+//全因数分解 O(sqrt(n))
+vector<int> v;   //v中储存因数
+v.clear();
+for(int j=1;j<=sqrt(x);j++){
+    if(x%j==0){
+        v[i].push_back(j);
+        if(x!=j*j)v[i].push_back(x/j);
+    }
+}
+//sort(v.begin(),v.end());  //若需要对因数排序 
 
 
 
