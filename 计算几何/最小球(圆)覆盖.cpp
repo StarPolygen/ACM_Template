@@ -63,7 +63,7 @@ double solve()
         if(def<0) {//移动后得到更优解，则总是接受移动
             X=X1;
         }//一定概率接受比当前更差的解
-        else if(exp( def/T ) > rand()%100/(double)101 ){
+        else if(exp( def/T ) > rand()%1000/(double)1001 ){
             X=X1;
         }
 

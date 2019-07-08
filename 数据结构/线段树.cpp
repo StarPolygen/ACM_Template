@@ -77,67 +77,70 @@
 
 
 //区间修改  
-    const int maxn=1e5+10;
-    int a[maxn];
-    int sum[maxn<<2],lazy[maxn<<2];
-    void maintain(int k)
-    {
-        sum[k]=sum[k<<1]+sum[k<<1|1];
-    }
-    void pushdown(int lenl,int lenr,int k)//标记下放，并更细节点信息
-    {
-        if(lazy[k]){
-            lazy[k<<1]=lazy[k];
-            lazy[k<<1|1]=lazy[k];
-            sum[k<<1]=lazy[k]*lenl;
-            sum[k<<1|1]=lazy[k]*lenr;
-            lazy[k]=0;
-        }
-    }
-    void build(int l,int r,int k)
-    {
-        if(l>r)
-            return ;
-        if(l==r){
-            sum[k]=a[l];
-            lazy[k]=0;
-            return ;
-        }
-        int mid=(l+r)>>1;
-        build(l,mid,k<<1);
-        build(mid+1,r,k<<1|1);
-        maintain(k);
-    }
+    #define maxn 100010
+    using namespace std;
+
+    struct node{
+        int l,r;
+        ll val;
+    }tree[maxn<<2];
+    ll lazy[maxn<<2];
     
-    //区间修改
-    void change(int l,int r,int cl,int cr,int k,int newp)
-    {
-        if(l>r||cl>r||cr<l)
-            return ;
-        if(l>=cl&&r<=cr){
-            sum[k]=newp*(r-l+1);//在发现现在区域小于需要更新区域时
-            lazy[k]=newp;//更新节点的结果，并增加延迟标记lazy，用于之后的标记下放
-            return ;
+    //建树
+    void init(int l,int r,int pos){
+        tree[pos].l=l; 
+        tree[pos].r=r;
+        lazy[pos]=0;
+        //初始化叶子节点值
+        if(l==r){
+            tree[pos].val=1;  //根据题目不同，赋予不同的初始值
+            return;
         }
         int mid=(l+r)>>1;
-        pushdown(mid-l+1,r-mid,k);
-        change(l,mid,cl,cr,k<<1,newp);
-        change(mid+1,r,cl,cr,k<<1|1,newp);
-        maintain(k);
+        init(l,mid,pos<<1);
+        init(mid+1,r,pos<<1|1);
+        //由子节点推得当前节点
+        tree[pos].val=tree[pos<<1].val+tree[pos<<1|1].val;
+    }
+    void pushdown(int pos){ //下放lazy标记,并将当前子节点的值更新
+        if(lazy[pos]){
+            lazy[pos<<1]=lazy[pos];
+            lazy[pos<<1|1]=lazy[pos];
+            //将当前节点子节点的值变为可信
+            tree[pos<<1].val=lazy[pos]*(tree[pos<<1].r-tree[pos<<1].l+1);
+            tree[pos<<1|1].val=lazy[pos]*(tree[pos<<1|1].r-tree[pos<<1|1].l+1);
+            lazy[pos]=0;
+        }
+    }
+    void pushup(int pos){ //向上更新节点
+        tree[pos].val=tree[pos<<1].val+tree[pos<<1|1].val;
+    }
+
+    //区间修改
+    void update(int l,int r,int from,int to,int pos,int k) 
+    {
+        if(from<=l&&r<=to){
+            //若该节点在范围内，更新该节点的各项指标
+            tree[pos].val=k*(r-l+1);
+            lazy[pos]=k;
+            return;
+        }
+        pushdown(pos);
+        int mid=(l+r)>>1;
+        if(from<=mid) update(l,mid,from,to,pos<<1,k);
+        if(mid<to) update(mid+1,r,from,to,pos<<1|1,k);
+        pushup(pos);
     }
 
     //区间查询2：针对区间修改
-    int query(int l,int r,int ql,int qr,int k)
+    ll query(int l,int r,int from,int to,int pos)
     {
-        if(l>r||ql>r||qr<l)
-            return 0;
-        if(l>=ql&&r<=qr)
-            return sum[k];
-        int mid=(l+r)>>1,ans=0;
-        pushdown(mid-l+1,r-mid,k);//每一层询问执行到这一步，为了下一次递归更新叶节点信息
-        if(mid>=l)
-            ans+=query(l,mid,ql,qr,k<<1);
-        if(mid<r)
-            ans+=query(mid+1,r,ql,qr,k<<1|1);
-        return ans;
+        if(from<=l&&r<=to) return tree[pos].val;
+        pushdown(pos);
+        int mid=(l+r)>>1;
+        ll res=0;
+        if(from<=mid) res+=query(l,mid,from,to,pos<<1);
+        if(mid<to) res+=query(mid+1,r,from,to,pos<<1|1);
+        pushup(pos);
+        return res;
     }
