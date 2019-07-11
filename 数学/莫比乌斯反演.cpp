@@ -1,5 +1,16 @@
 //洛谷P2257 YY的GCD
+
 //莫比乌斯反演
+//F(n)和f(n)是定义在非负整数集合上的两个函数
+//并且满足条件F(n) = sum(f(d)) (d|n)
+//那么f(n) = sum(u(d)*F(n/d)) (d|n)
+//case 1: if d = 1, u(d) = 1
+//case 2: if d = p1*p2...pk, (pi均为互异素数), u(d) = (-1)^k
+//case 3: else, u(d) = 0;
+//性质1: sum(u(d)) (d|n) = 1 (n == 1) or 0 (n > 1)
+//性质2: sum(u(d)/d) (d|n) = phi(n)/n
+//另一种形式:F(d) = sum(f(n)) (d|n) => f(d) = sum(u(n/d)*F(n)) (d|n)
+//线性筛选求莫比乌斯反演函数代码
 #include <bits/stdc++.h>
 #define ll long long
 #define maxn 10000010
