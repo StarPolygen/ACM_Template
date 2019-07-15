@@ -72,7 +72,7 @@ LL phi[p_max];
 void get_phi() {
     phi[1] = 1;
     static bool vis[p_max];
-    static LL prime[p_max], p_sz, d;
+    static LL prime[p_max], p_sz, d;	//使用时注意在函数外初始化 
     FOR (i, 2, p_max) {
         if (!vis[i]) {
             prime[p_sz++] = i;
@@ -183,22 +183,24 @@ ll sqrt(ll x) {
 
 
 
-'7. 质因数分解 /全因数分解 
+'7. 质因数分解  
 //前置模板：素数筛
 //带指数 
 ll factor[30], f_sz, factor_exp[30];
 void get_factor(ll x) {
     f_sz = 0;
     ll t = sqrt(x + 0.5);
-    for (ll i = 0; pr[i] <= t; ++i)
-        if (x % pr[i] == 0) {
+    for (ll i = 0; prime[i] <= t; ++i){
+    	if (prime[i] > x) break;
+        if (x % prime[i] == 0) {
             factor_exp[f_sz] = 0;
-            while (x % pr[i] == 0) {
-                x /= pr[i];
+            while (x % prime[i] == 0) {
+                x /= prime[i];
                 ++factor_exp[f_sz];
             }
-            factor[f_sz++] = pr[i];
+            factor[f_sz++] = prime[i];
         }
+	}
     if (x > 1) {
         factor_exp[f_sz] = 1;
         factor[f_sz++] = x;
@@ -209,15 +211,18 @@ ll factor[30], f_sz;
 void get_factor(ll x) {
     f_sz = 0;
     ll t = sqrt(x + 0.5);
-    for (ll i = 0; pr[i] <= t; ++i)
-        if (x % pr[i] == 0) {
-            factor[f_sz++] = pr[i];
-            while (x % pr[i] == 0) x /= pr[i];
+    for (ll i = 0; prime[i] <= t; ++i){ 
+    	if (prime[i] > x) break; 
+        if (x % prime[i] == 0) {
+            factor[f_sz++] = prime[i];
+            while (x % prime[i] == 0) x /= prime[i];
         }
+    } 
     if (x > 1) factor[f_sz++] = x;
 } 
 
-//全因数分解 O(sqrt(n))
+'7.2 全因数分解 
+//O(sqrt(n))
 vector<int> v;   //v中储存因数
 v.clear();
 for(int j=1;j<=sqrt(x);j++){
@@ -225,9 +230,36 @@ for(int j=1;j<=sqrt(x);j++){
         v[i].push_back(j);
         if(x!=j*j)v[i].push_back(x/j);
     }
-}
-//sort(v.begin(),v.end());  //若需要对因数排序 
+}sort(v.begin(),v.end());  //若需要对因数排序 
 
+//O(全因数个数)
+//前置模板: 分解质因数带指数
+map<long long,int> mp;   //mp中为满足条件的因数 无需记录因数时应不使用mp
+map<long long,int> ::iterator it;
+void dfs(int cur,int n,long long num){ //第几个数，该数第几个，总共多少个数 ,是否组合数 
+	if(cur>=n)
+		return;
+	dfs(cur+1,n,num);
+	for(int i=1;i<=factor_exp[cur];i++){
+		num*=factor[cur];
+        // if(num>=b) return; //求小于b的因数个数
+		mp[num]=1;
+		dfs(cur+1,n,num);
+	}
+} 
+void slove(long long num){
+    mp.clear();  //初始化 注意每次都对1进行装填
+    mp[1]=1;
+    get_factor(num);//分解质因数 
+    dfs(0,f_sz,1);  //调用全因数分解 
+	printf("%d\n",mp.size()); 
+	for(it=mp.begin();it!=mp.end();it++)  printf("%I64d ",it->first);
+	printf("\n");
+	
+}
+
+
+ 
 
 
 
