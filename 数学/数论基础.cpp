@@ -1,24 +1,24 @@
-'Ä¿Â¼£º 
-'1. Å·¼¸ÀïµÃ                  ¿¨³£Å·¼¸ÀïµÃ 
-'2. EX-GCD
-'3. É¸                        ÏßĞÔÉ¸ Å·À­É¸ Äª±ÈÎÚË¹É¸ 
-'4. ¿ìËÙÃİ 
-'5. ¿ìËÙ³Ë                    O(1)¿ìËÙ³Ë  ¿¨³£¿ìËÙ³Ë 
-'6. Å£¶Ù·¨µü´úÇó¸ù  
-'7. ÖÊÒòÊı·Ö½â / È«ÒòÊı·Ö½â 
-'8. Ô­¸ù 
-'9. Å·À­º¯Êı 
+ç›®å½•ï¼š 
+1. æ¬§å‡ é‡Œå¾—                  å¡å¸¸æ¬§å‡ é‡Œå¾— 
+2. EX-GCD
+3. ç­›                        çº¿æ€§ç­› æ¬§æ‹‰ç­› è«æ¯”ä¹Œæ–¯ç­› 
+4. å¿«é€Ÿå¹‚ 
+5. å¿«é€Ÿä¹˜                    O(1)å¿«é€Ÿä¹˜  å¡å¸¸å¿«é€Ÿä¹˜ 
+6. ç‰›é¡¿æ³•è¿­ä»£æ±‚æ ¹  
+7. è´¨å› æ•°åˆ†è§£ / å…¨å› æ•°åˆ†è§£ 
+8. åŸæ ¹ 
+9. æ¬§æ‹‰å‡½æ•° 
 
 
 
 
-'1. Å·¼¸ÀïµÃ    
-//ÓĞ¸ºÊıÊ±»áÒÔ¾ø¶ÔÖµ½Ï´óµÄÊıµÄ·ûºÅ  ×÷ÎªgcdµÄ·ûºÅ 
+1. æ¬§å‡ é‡Œå¾—    
+//æœ‰è´Ÿæ•°æ—¶ä¼šä»¥ç»å¯¹å€¼è¾ƒå¤§çš„æ•°çš„ç¬¦å·  ä½œä¸ºgcdçš„ç¬¦å· 
 inline ll gcd(ll a,ll b)
 {
     return b?gcd(b,a%b):a;
 } 
-//¿¨³£Å·¼¸ÀïµÃ  ¸ºÊıÎŞĞ§
+//å¡å¸¸æ¬§å‡ é‡Œå¾—  è´Ÿæ•°æ— æ•ˆ
 inline int ctz(ll x) { return __builtin_ctzll(x); }
 ll gcd(ll a, ll b) {
     if (!a) return b; if (!b) return a;
@@ -38,8 +38,8 @@ ll gcd(ll a, ll b) {
 
 
 
-'2. À©Õ¹Å·¼¸ÀïµÃ 
-//Èôa ºÍ b »¥ËØ£¬ÄÇÃ´ x ÊÇ a ÔÚÄ£ b ÏÂµÄÄæÔª
+2. æ‰©å±•æ¬§å‡ é‡Œå¾— 
+//è‹¥a å’Œ b äº’ç´ ï¼Œé‚£ä¹ˆ x æ˜¯ a åœ¨æ¨¡ b ä¸‹çš„é€†å…ƒ
 ll ex_gcd(ll a, ll b, ll &x, ll &y) {
     if (b == 0) { x = 1; y = 0; return a; }
     ll ret = ex_gcd(b, a % b, y, x);
@@ -52,27 +52,27 @@ ll ex_gcd(ll a, ll b, ll &x, ll &y) {
 
 
 
-'3. ËØÊıÉ¸ 
-//ËØÊıÉ¸ 
+3. ç´ æ•°ç­› 
+//ç´ æ•°ç­› 
 const int MAXSIZE; 
-int Mark[MAXSIZE];     //prime[0]Æğ 
-int prime[MAXSIZE];    //ÅĞ¶ÏÊÇ·ñÊÇÒ»¸öËØÊı  Mark ±ê¼ÇÊı×é index ËØÊı¸öÊı  
+int Mark[MAXSIZE];     //prime[0]èµ· 
+int prime[MAXSIZE];    //åˆ¤æ–­æ˜¯å¦æ˜¯ä¸€ä¸ªç´ æ•°  Mark æ ‡è®°æ•°ç»„ index ç´ æ•°ä¸ªæ•°  
 int Prime(){	
 	int index=0;
     for (int i = 2; i < MAXSIZE; i++){
-        if(Mark[i]) continue;//Èç±ê¼ÇÔòÌø¹ı  
-        prime[index++] = i;//·ñÔòµÃµ½Ò»¸öËØÊı
-        for (int j = i + i; j < MAXSIZE; j += i) Mark[j] = 1;//±ê¼ÇÄ¿Ç°µÃµ½µÄËØÊıµÄi±¶Îª·ÇËØÊı
+        if(Mark[i]) continue;//å¦‚æ ‡è®°åˆ™è·³è¿‡  
+        prime[index++] = i;//å¦åˆ™å¾—åˆ°ä¸€ä¸ªç´ æ•°
+        for (int j = i + i; j < MAXSIZE; j += i) Mark[j] = 1;//æ ‡è®°ç›®å‰å¾—åˆ°çš„ç´ æ•°çš„iå€ä¸ºéç´ æ•°
     }
     return index;
 }
-//ÏßĞÔÉ¸+Å·À­º¯Êı
+//çº¿æ€§ç­›+æ¬§æ‹‰å‡½æ•°
 const LL p_max = 1E5 + 100;
 LL phi[p_max];
 void get_phi() {
     phi[1] = 1;
     static bool vis[p_max];
-    static LL prime[p_max], p_sz, d;	//Ê¹ÓÃÊ±×¢ÒâÔÚº¯ÊıÍâ³õÊ¼»¯ 
+    static LL prime[p_max], p_sz, d;	//ä½¿ç”¨æ—¶æ³¨æ„åœ¨å‡½æ•°å¤–åˆå§‹åŒ– 
     FOR (i, 2, p_max) {
         if (!vis[i]) {
             prime[p_sz++] = i;
@@ -88,7 +88,7 @@ void get_phi() {
         }
     }
 }
-//ÏßĞÔÉ¸+Äª±ÈÎÚË¹º¯Êı
+//çº¿æ€§ç­›+è«æ¯”ä¹Œæ–¯å‡½æ•°
 const LL p_max = 1E5 + 100;
 LL mu[p_max];
 void get_mu() {
@@ -120,8 +120,8 @@ void get_mu() {
 
 
 
-'4. ¿ìËÙÃİ
-//µ±Ïà³Ë»á±¬long long Ê±ĞèÒªÅäºÏ¿ìËÙ³ËÊ¹ÓÃ  ½«³Ë·¨Ìæ»»Îª¿ìËÙ³Ë 
+4. å¿«é€Ÿå¹‚
+//å½“ç›¸ä¹˜ä¼šçˆ†long long æ—¶éœ€è¦é…åˆå¿«é€Ÿä¹˜ä½¿ç”¨  å°†ä¹˜æ³•æ›¿æ¢ä¸ºå¿«é€Ÿä¹˜ 
 ll bin(ll x, ll n, ll mod) {
     ll ret = mod != 1;
     for (x %= mod; n; n >>= 1, x = x * x % mod)
@@ -136,8 +136,8 @@ ll bin(ll x, ll n, ll mod) {
 
 
 
-'5. ¿ìËÙ³Ë 
-//»ùÓÚ¿ìËÙÃİO(logn)   Ïà³Ë±¬llÊ±ĞèÒªÊ¹ÓÃ 
+5. å¿«é€Ÿä¹˜ 
+//åŸºäºå¿«é€Ÿå¹‚O(logn)   ç›¸ä¹˜çˆ†llæ—¶éœ€è¦ä½¿ç”¨ 
 ll mul(ll a, ll b, ll m) {
     ll ret = 0;
     while (b) {
@@ -151,11 +151,11 @@ ll mul(ll a, ll b, ll m) {
     }
     return ret;
 }
-//O(1)¿ìËÙ³Ë 
+//O(1)å¿«é€Ÿä¹˜ 
 ll mul(ll u, ll v, ll p) {
     return (u * v - ll((long double) u * v / p) * p + p) % p;
 }
-ll mul(ll u, ll v, ll p) { // ¿¨³£
+ll mul(ll u, ll v, ll p) { // å¡å¸¸
     ll t = u * v - ll((long double) u * v / p) * p;
     return t < 0 ? t + p : t;
 }
@@ -164,7 +164,7 @@ ll mul(ll u, ll v, ll p) { // ¿¨³£
 
 
 
-'6. Å£¶Ùµü´ú·¨Çó¸ù
+6. ç‰›é¡¿è¿­ä»£æ³•æ±‚æ ¹
 ll sqrt(ll x) {
     if (x == 0) return 0;
     double last = 0;
@@ -183,9 +183,9 @@ ll sqrt(ll x) {
 
 
 
-'7. ÖÊÒòÊı·Ö½â  
-//Ç°ÖÃÄ£°å£ºËØÊıÉ¸
-//´øÖ¸Êı 
+7. è´¨å› æ•°åˆ†è§£  
+//å‰ç½®æ¨¡æ¿ï¼šç´ æ•°ç­›
+//å¸¦æŒ‡æ•° 
 ll factor[30], f_sz, factor_exp[30];
 void get_factor(ll x) {
     f_sz = 0;
@@ -206,7 +206,7 @@ void get_factor(ll x) {
         factor[f_sz++] = x;
     }
 }
-//²»´øÖ¸Êı
+//ä¸å¸¦æŒ‡æ•°
 ll factor[30], f_sz;
 void get_factor(ll x) {
     f_sz = 0;
@@ -221,37 +221,37 @@ void get_factor(ll x) {
     if (x > 1) factor[f_sz++] = x;
 } 
 
-'7.2 È«ÒòÊı·Ö½â 
+7.2 å…¨å› æ•°åˆ†è§£ 
 //O(sqrt(n))
-vector<int> v;   //vÖĞ´¢´æÒòÊı
+vector<int> v;   //vä¸­å‚¨å­˜å› æ•°
 v.clear();
 for(int j=1;j<=sqrt(x);j++){
     if(x%j==0){
         v[i].push_back(j);
         if(x!=j*j)v[i].push_back(x/j);
     }
-}sort(v.begin(),v.end());  //ÈôĞèÒª¶ÔÒòÊıÅÅĞò 
+}sort(v.begin(),v.end());  //è‹¥éœ€è¦å¯¹å› æ•°æ’åº 
 
-//O(È«ÒòÊı¸öÊı)
-//Ç°ÖÃÄ£°å: ·Ö½âÖÊÒòÊı´øÖ¸Êı
-map<long long,int> mp;   //mpÖĞÎªÂú×ãÌõ¼şµÄÒòÊı ÎŞĞè¼ÇÂ¼ÒòÊıÊ±Ó¦²»Ê¹ÓÃmp
+//O(å…¨å› æ•°ä¸ªæ•°)
+//å‰ç½®æ¨¡æ¿: åˆ†è§£è´¨å› æ•°å¸¦æŒ‡æ•°
+map<long long,int> mp;   //mpä¸­ä¸ºæ»¡è¶³æ¡ä»¶çš„å› æ•° æ— éœ€è®°å½•å› æ•°æ—¶åº”ä¸ä½¿ç”¨mp
 map<long long,int> ::iterator it;
-void dfs(int cur,int n,long long num){ //µÚ¼¸¸öÊı£¬¸ÃÊıµÚ¼¸¸ö£¬×Ü¹²¶àÉÙ¸öÊı ,ÊÇ·ñ×éºÏÊı 
+void dfs(int cur,int n,long long num){ //ç¬¬å‡ ä¸ªæ•°ï¼Œè¯¥æ•°ç¬¬å‡ ä¸ªï¼Œæ€»å…±å¤šå°‘ä¸ªæ•° ,æ˜¯å¦ç»„åˆæ•° 
 	if(cur>=n)
 		return;
 	dfs(cur+1,n,num);
 	for(int i=1;i<=factor_exp[cur];i++){
 		num*=factor[cur];
-        // if(num>=b) return; //ÇóĞ¡ÓÚbµÄÒòÊı¸öÊı
+        // if(num>=b) return; //æ±‚å°äºbçš„å› æ•°ä¸ªæ•°
 		mp[num]=1;
 		dfs(cur+1,n,num);
 	}
 } 
 void slove(long long num){
-    mp.clear();  //³õÊ¼»¯ ×¢ÒâÃ¿´Î¶¼¶Ô1½øĞĞ×°Ìî
+    mp.clear();  //åˆå§‹åŒ– æ³¨æ„æ¯æ¬¡éƒ½å¯¹1è¿›è¡Œè£…å¡«
     mp[1]=1;
-    get_factor(num);//·Ö½âÖÊÒòÊı 
-    dfs(0,f_sz,1);  //µ÷ÓÃÈ«ÒòÊı·Ö½â 
+    get_factor(num);//åˆ†è§£è´¨å› æ•° 
+    dfs(0,f_sz,1);  //è°ƒç”¨å…¨å› æ•°åˆ†è§£ 
 	printf("%d\n",mp.size()); 
 	for(it=mp.begin();it!=mp.end();it++)  printf("%I64d ",it->first);
 	printf("\n");
@@ -265,9 +265,9 @@ void slove(long long num){
 
 
 
-'8. Ô­¸ù
-//Ç°ÖÃÄ£°å£ºËØÊıÉ¸£¬¿ìËÙÃİ£¬·Ö½âÖÊÒòÊı
-//ÒªÇó p ÎªÖÊÊı 
+8. åŸæ ¹
+//å‰ç½®æ¨¡æ¿ï¼šç´ æ•°ç­›ï¼Œå¿«é€Ÿå¹‚ï¼Œåˆ†è§£è´¨å› æ•°
+//è¦æ±‚ p ä¸ºè´¨æ•° 
 ll find_smallest_primitive_root(ll p) {
     get_factor(p - 1);
     FOR (i, 2, p) {
@@ -281,28 +281,24 @@ ll find_smallest_primitive_root(ll p) {
     }
     assert(0); return -1;
 }
-//ÓĞ¹ØµÄÔ­¸ù¸öÊı £º¼¸¸öÖØÒª½áÂÛ 
-//1.¶ÔÓÚÈÎÒâÕıÕûÊım  ÈôÔ­¸ù´æÔÚ£¬¸öÊıÎª ¦Õ(¦Õ(m))
-//2.¶ÔÓÚËØÊıp        p,p^2¾ù´æÔÚÔ­¸ù£¬¸öÊı·Ö±ğÎª ¦Õ(p-1)¡¢(p-1)¦Õ(p-1)
-//3.¶ÔÓÚÆæËØÊıp      p^nµÄÔ­¸ù´æÔÚ£¬¸öÊıÎª  p^(n-2)*(p-1)*¦Õ(p-1)   n>=2
+//æœ‰å…³çš„åŸæ ¹ä¸ªæ•° ï¼šå‡ ä¸ªé‡è¦ç»“è®º 
+//1.å¯¹äºä»»æ„æ­£æ•´æ•°m  è‹¥åŸæ ¹å­˜åœ¨ï¼Œä¸ªæ•°ä¸º Ï†(Ï†(m))
+//2.å¯¹äºç´ æ•°p        p,p^2å‡å­˜åœ¨åŸæ ¹ï¼Œä¸ªæ•°åˆ†åˆ«ä¸º Ï†(p-1)ã€(p-1)Ï†(p-1)
+//3.å¯¹äºå¥‡ç´ æ•°p      p^nçš„åŸæ ¹å­˜åœ¨ï¼Œä¸ªæ•°ä¸º  p^(n-2)*(p-1)*Ï†(p-1)   n>=2
 
 
 
 
 
-'9. O(log)Å·À­º¯Êı 
-ll eular(ll n)
-{
-	ll ret=1,i;
-	for (i=2;i*i<=n;i++)
-		if (n%i==0)
-		{
-			n/=i,ret*=i-1;
-			while (n%i==0)
-				n/=i,ret*=i;
+9. O(log)æ¬§æ‹‰å‡½æ•° 
+ll eular(ll n) {
+	ll ret = 1, i;
+	for (i = 2; i * i <= n; i++)
+		if (n % i == 0){
+			n /= i, ret *= i - 1;
+			while (n % i == 0)	n /= i, ret *= i;
 		}
-	if (n>1)
-		ret*=n-1;
+	if (n > 1)	ret *= n - 1;
 	return ret;
 }
 
