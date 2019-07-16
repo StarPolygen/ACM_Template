@@ -55,16 +55,15 @@ ll ex_gcd(ll a, ll b, ll &x, ll &y) {
 3. 素数筛 
 //素数筛 
 const int MAXSIZE; 
-int Mark[MAXSIZE];     //prime[0]起 
-int prime[MAXSIZE];    //判断是否是一个素数  Mark 标记数组 index 素数个数  
-int Prime(){	
-	int index=0;
+int Mark[MAXSIZE],ind=0;     //prime[0]起 
+int prime[MAXSIZE];    //判断是否是一个素数  Mark 标记数组 ind 素数个数  
+void Prime(){	
+	ind=0;
     for (int i = 2; i < MAXSIZE; i++){
         if(Mark[i]) continue;//如标记则跳过  
-        prime[index++] = i;//否则得到一个素数
+        prime[ind++] = i;//否则得到一个素数
         for (int j = i + i; j < MAXSIZE; j += i) Mark[j] = 1;//标记目前得到的素数的i倍为非素数
     }
-    return index;
 }
 //线性筛+欧拉函数
 const LL p_max = 1E5 + 100;
@@ -189,9 +188,7 @@ ll sqrt(ll x) {
 ll factor[30], f_sz, factor_exp[30];
 void get_factor(ll x) {
     f_sz = 0;
-    ll t = sqrt(x + 0.5);
-    for (ll i = 0; prime[i] <= t; ++i){
-    	if (prime[i] > x) break;
+    for (ll i = 0; i < ind && prime[i] * prime[i] <= t; ++i){
         if (x % prime[i] == 0) {
             factor_exp[f_sz] = 0;
             while (x % prime[i] == 0) {
