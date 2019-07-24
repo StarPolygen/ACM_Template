@@ -53,7 +53,7 @@ ll ex_gcd(ll a, ll b, ll &x, ll &y) {
 
 
 3. 素数筛 
-//素数筛 
+//素数筛 埃氏筛 O(nloglogn)
 const int MAXSIZE; 
 int Mark[MAXSIZE],ind=0;     //prime[0]起 
 int prime[MAXSIZE];    //判断是否是一个素数  Mark 标记数组 ind 素数个数  
@@ -65,14 +65,14 @@ void Prime(){
         for (int j = i + i; j < MAXSIZE; j += i) Mark[j] = 1;//标记目前得到的素数的i倍为非素数
     }
 }
-//线性筛+欧拉函数
+//线性筛+欧拉函数 O(n)
 const LL p_max = 1E5 + 100;
 LL phi[p_max];
 void get_phi() {
     phi[1] = 1;
     static bool vis[p_max];
     static LL prime[p_max], p_sz, d;	//使用时注意在函数外初始化 
-    FOR (i, 2, p_max) {
+    for (int i = 2; i < p_max; i++) {
         if (!vis[i]) {
             prime[p_sz++] = i;
             phi[i] = i - 1;
@@ -95,7 +95,7 @@ void get_mu() {
     static bool vis[p_max];
     static LL prime[p_max], p_sz, d;
     mu[1] = 1;
-    FOR (i, 2, p_max) {
+    for (int i = 2; i < p_max; i++) {
         if (!vis[i]) {
             prime[p_sz++] = i;
             mu[i] = -1;
