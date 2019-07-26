@@ -21,81 +21,123 @@ inline void write(int x)
 }
 
 
-//更全
-namespace io {
-	const int SIZE = (1 << 21) + 1;
-	char ibuf[SIZE], *iS, *iT, obuf[SIZE], *oS = obuf, *oT = oS + SIZE - 1, c, qu[55]; int f, qr;
-	// getchar
-	#define gc() (iS == iT ? (iT = (iS = ibuf) + fread (ibuf, 1, SIZE, stdin), (iS == iT ? EOF : *iS ++)) : *iS ++)
-	// print the remaining part
-	inline void flush () {
-		fwrite (obuf, 1, oS - obuf, stdout);
-		oS = obuf;
-	}
-	// putchar
-	inline void putc (char x) {
-		*oS ++ = x;
-		if (oS == oT) flush ();
-	} 
-	// input a signed integer
-	inline bool read (signed &x) {
-		for (f = 1, c = gc(); c < '0' || c > '9'; c = gc()) if (c == '-') f = -1;else if(c==EOF)return 0;
-		for (x = 0; c <= '9' && c >= '0'; c = gc()) x = x * 10 + (c & 15); x *= f;
-		return 1;
-	}
+//更全 用法就和cin 和 cout一样
+#include<string>
+#include<vector>
+#include<regex>
+#include<algorithm>
+#include<random>
+#include<map>
+#include<array>
+#include<set>
+#include<deque>
+#include<iomanip>
+#include<sstream>
+#include<stack>
+#include<iostream>
+#include<limits>
+#include<bitset>
+#include<list>
+#include<queue>
+#include<memory.h>
+#include<unordered_map>
+#include<functional>
+using namespace std;
+struct ioss {
+#define endl '\n'
+    static const int LEN = 20000000;
+    char obuf[LEN], *oh = obuf;
+    std::streambuf *fb;
+    ioss()
+    {
+        ios::sync_with_stdio(false);
+        cin.tie(NULL);
+        cout.tie(NULL);
+        fb = cout.rdbuf();
+    }
+    inline char gc() {
  
-	inline bool read (long long &x) {
-		for (f = 1, c = gc(); c < '0' || c > '9'; c = gc()) if (c == '-') f = -1;else if(c==EOF)return 0;
-		for (x = 0; c <= '9' && c >= '0'; c = gc()) x = x * 10 + (c & 15); x *= f;
-		return 1;
-	}
-	inline bool read (char &x) {
-		x=gc();
-		return x!=EOF;
-	}
-	inline bool read(char *x){
-		while((*x=gc())=='\n' || *x==' '||*x=='\r')if(*x==EOF)return 0;
-		while(!(*x=='\n'||*x==' '||*x=='\r'))*(++x)=gc();
-		*x=0;
-		return 1;
-	}
-	template<typename A,typename ...B>
-	inline bool read(A &x,B &...y){
-		return read(x)&&read(y...);
-	}
-	// print a signed integer
-	inline bool write (signed x) {
-		if (!x) putc ('0'); if (x < 0) putc ('-'), x = -x;
-		while (x) qu[++ qr] = x % 10 + '0',  x /= 10;
-		while (qr) putc (qu[qr --]);
-		return 0;
-	}
- 
-	inline bool write (long long x) {
-		if (!x) putc ('0'); if (x < 0) putc ('-'), x = -x;
-		while (x) qu[++ qr] = x % 10 + '0',  x /= 10;
-		while (qr) putc (qu[qr --]);
-		return 0;
-	}
-	inline bool write (char x) {
-		putc(x);
-		return 0;
-	}
-	inline bool write(const char *x){
-		while(*x){putc(*x);++x;}
-		return 0;
-	}
-	inline bool write(char *x){
-		while(*x){putc(*x);++x;}
-		return 0;
-	}
-	template<typename A,typename ...B>
-	inline bool write(A x,B ...y){
-		return write(x)||write(y...);
-	}
-	//no need to call flush at the end manually!
-	struct Flusher_ {~Flusher_(){flush();}}io_flusher_;
-}
-using io :: read;
-using io :: putc;
-using io :: write;
+        static char buf[LEN], *s, *t, buf2[LEN];
+        return (s == t) && (t = (s = buf) + fread(buf, 1, LEN, stdin)), s == t ? -1 : *s++;
+    }
+    inline ioss & operator >> (long long&x) {
+        static char ch, sgn, *p;
+        ch = gc(), sgn = 0;
+        for (; !isdigit(ch); ch = gc()) { if (ch == -1)return *this; sgn |= ch == '-'; }
+        for (x = 0; isdigit(ch); ch = gc())x = x * 10 + (ch^'0');
+        sgn && (x = -x); return *this;
+    }
+    inline ioss & operator >> (int &x) {
+        static char ch, sgn, *p;
+        ch = gc(), sgn = 0;
+        for (; !isdigit(ch); ch = gc()) { if (ch == -1)return *this; sgn |= ch == '-'; }
+        for (x = 0; isdigit(ch); ch = gc())x = x * 10 + (ch^'0');
+        sgn && (x = -x); return *this;
+    }
+    inline ioss & operator >> (char&x)
+    {
+        static char ch;
+        for (; !isalpha(ch); ch = gc())
+        {
+            if (ch == -1)return *this;
+        }
+        x = ch;
+        return *this;
+    }
+    inline ioss & operator >> (string &x)
+    {
+        static char ch, *p, buf2[LEN];
+        for (; !isalpha(ch) && !isdigit(ch); ch = gc())
+            if (ch == -1)return *this;
+        p = buf2;
+        for (; isalpha(ch)|| isdigit(ch); ch = gc())
+            *p = ch, p++;
+        *p = '\0';
+        x = buf2;
+        return *this;
+    }
+    inline ioss & operator <<(string &c)
+    {
+        for (auto &p : c)
+            this->operator<<(p);
+        return *this;
+    }
+    inline ioss & operator <<(const char *c)
+    {
+        while (*c != '\0')
+        {
+            this->operator<<(*c);
+            c++;
+        }
+        return *this;
+    }
+    inline ioss & operator <<(const char &c) {
+        oh == obuf + LEN ? (fb->sputn(obuf, LEN), oh = obuf) : 0;
+        *oh++ = c;
+        return *this;
+    }
+    inline ioss & operator <<(int x) {
+        static int buf[30], cnt;
+        if (x < 0)
+            this->operator<<('-'),x=-x;
+        if (x == 0)
+            this->operator<<('0');
+        for (cnt = 0; x; x /= 10) buf[++cnt] = x % 10 | 48;
+        while (cnt) this->operator<<((char)buf[cnt--]);
+        return *this;
+    }
+    inline ioss & operator <<(long long x) {
+        static int buf[30], cnt;
+        if (x < 0)
+            this->operator<<('-'), x = -x;
+        if (x == 0)
+            this->operator<<('0');
+        for (cnt = 0; x; x /= 10) buf[++cnt] = x % 10 | 48;
+        while (cnt) this->operator<<((char)buf[cnt--]);
+        return *this;
+    }
+    ~ioss()
+    {
+        fb->sputn(obuf, oh - obuf);
+    }
+} io; 
