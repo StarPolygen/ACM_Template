@@ -184,11 +184,11 @@ ll sqrt(ll x) {
 
 7. 质因数分解  
 //前置模板：素数筛
-//带指数 
+//带指数
 ll factor[30], f_sz, factor_exp[30];
 void get_factor(ll x) {
     f_sz = 0;
-    for (ll i = 0; i < ind && prime[i] * prime[i] <= t; ++i){
+    for (ll i = 0; i < ind && prime[i] * prime[i] <= x; ++i){
         if (x % prime[i] == 0) {
             factor_exp[f_sz] = 0;
             while (x % prime[i] == 0) {
@@ -217,15 +217,42 @@ void get_factor(ll x) {
     } 
     if (x > 1) factor[f_sz++] = x;
 } 
+//无需素数筛，用于较大数分解(1e6-1e9) O(根号n)
+ll factor[30], f_sz, factor_exp[30];
+void get_factor(ll x)
+{
+    f_sz = 0;
+    memset(factor, 0, sizeof(factor));
+    memset(factor_exp, 0, sizeof(factor_exp));
+
+    for (ll i = 2; i * i <= x; i++)
+        if (x % i == 0)
+        {
+            factor[f_sz] = i;
+            factor_exp[f_sz] = 0;
+            while (x % i == 0)
+            {
+                x /= i;
+                factor_exp[f_sz]++;
+            }
+            f_sz++;
+        }
+    if (x > 1)
+    {
+        factor[f_sz] = x;
+        factor_exp[f_sz] = 1;
+        f_sz++;
+    }
+}
 
 7.2 全因数分解 
 //O(sqrt(n))
-vector<int> v;   //v中储存因数
+vector<ll> v;   //v中储存因数
 v.clear();
-for(int j=1;j<=sqrt(x);j++){
+for(ll j=1;j*j<=x;j++){
     if(x%j==0){
-        v[i].push_back(j);
-        if(x!=j*j)v[i].push_back(x/j);
+        v.push_back(j);
+        if(x!=j*j) v.push_back(x/j);
     }
 }sort(v.begin(),v.end());  //若需要对因数排序 
 
