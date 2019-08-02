@@ -121,12 +121,15 @@ void get_mu() {
 
 4. 快速幂
 //当相乘会爆long long 时需要配合快速乘使用  将乘法替换为快速乘 
-ll bin(ll x, ll n, ll mod) {
-    ll ret = mod != 1;
-    for (x %= mod; n; n >>= 1, x = x * x % mod)
-        if (n & 1) ret = ret * x % mod;
-    return ret;
-}
+inline ll bin(ll base, ll n, ll p) {
+    ll res = 1;
+    while (n) {
+        if (n & 1) res = res * base % p;
+        base = base * base % p;
+        n >>= 1;
+    }
+    return res;
+}inline ll get_inv(ll x, ll p) {  return bin(x, p - 2, p);  }
 
 
 
