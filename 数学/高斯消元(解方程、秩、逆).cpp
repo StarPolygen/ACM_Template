@@ -7,7 +7,7 @@ using namespace std;
 
 //矩阵求秩：    求解方程组模板中改为把 row 输出即可
 
-//高斯消元解线性方程组      大概O(n^3)    精确O(min(equ,val+1)*equ*(val+1))
+//高斯消元解线性方程组         O(min(equ,val+1)*equ*(val+1))          可以理解为O(n^3)
 //整数版本                     //高斯消元 
 int a[N][N];//增广矩阵   行数 equ   列数 val+1 
 int x[N];//解集

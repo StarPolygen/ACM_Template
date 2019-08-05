@@ -1,73 +1,45 @@
-//¾ØÕóĞĞÁĞÊ½ÇóÖµ 
-#include<iostream>
-#include<cstdio>
-#include<cmath>
- 
+//è¡Œåˆ—å¼æ±‚å€¼
+#include <bits/stdc++.h>
+#define ll long long
+#define maxn 205
+#define inf 0x3f3f3f3f
 using namespace std;
- 
-typedef __int64 lld;
 
-lld a[205][205];
- 
-int sign;
-ll N,MOD;
-void solved()
-{
-    ll ans=1;
-    for(int i=0;i<N;i++)//µ±Ç°ĞĞ
-    {
-        for(int j=i+1;j<N;j++)//µ±Ç°Ö®ºóµÄÃ¿Ò»ĞĞ£¬ÒòÎªÃ¿Ò»ĞĞµÄµ±Ç°µÚÒ»¸öÊıÒª×ª»¯³É0£¨ÏëÏëÏßĞÔ´úÊıÖĞĞĞÁĞÊ½µÄ¼ÆËã£©
-        {
-            int x=i,y=j;
-            while(a[y][i])//ÀûÓÃgcdµÄ·½·¨£¬²»Í£µØ½øĞĞÕ·×ªÏà³ı
-            {
-                ll t=a[x][i]/a[y][i];
- 
-                for(int k=i;k<N;k++)
-                    a[x][k]=(a[x][k]-a[y][k]*t)%MOD;
- 
-                swap(x,y);
-            }
-            if(x!=i)//ÆæÊı´Î½»»»£¬ÔòD=-D'ÕûĞĞ½»»»
-            {
-                for(int k=0;k<N;k++)
-                    swap(a[i][k],a[x][k]);
-                sign^=1;
-            }
-        }
-        if(a[i][i]==0)//Ğ±¶Ô½ÇÖĞÓĞÒ»¸ö0£¬Ôò½á¹ûÎª0
-        {
-            cout<<0<<endl;
-            return ;
-        }
- 
-        else
-            ans=ans*a[i][i]%MOD;
- 
-    }
- 
-    if(sign!=0)
-        ans*=-1;
-    if(ans<0)
-        ans+=MOD;
-    printf("%I64d\n",ans);
+ll B[maxn][maxn];
+ll n, mod;
+
+//æ— é¡»å–æ¨¡çš„è¯åˆ æ‰modç›¸å…³æ“ä½œå³å¯
+inline ll det(long long n, long long mod) {    //é«˜æ–¯æ¶ˆå…ƒå®ç° å¤æ‚åº¦O(n^3)
+    ll ans = 1; 	
+	for (int i=0;i<n;i++){  //å½“å‰è¡Œ
+		for (int j=i+1;j<n;j++){ //å½“å‰ä¹‹åçš„æ¯ä¸€è¡Œï¼Œå› ä¸ºæ¯ä¸€è¡Œçš„å½“å‰ç¬¬ä¸€ä¸ªæ•°è¦è½¬åŒ–æˆ0ï¼ˆæƒ³æƒ³çº¿æ€§ä»£æ•°ä¸­è¡Œåˆ—å¼çš„è®¡ç®—ï¼‰
+			while (B[j][i]){    //åˆ©ç”¨gcdçš„æ–¹æ³•ï¼Œä¸åœåœ°è¿›è¡Œè¾—è½¬ç›¸é™¤ä»¥å®ç°åŒ–ç®€ä¸º0
+				ll t = B[i][i] / B[j][i];
+				for (int k=i;k<n;k++){
+					B[i][k] = (B[i][k] - B[j][k] * t % mod + mod) % mod;
+					swap(B[i][k], B[j][k]);
+				}
+				ans = -ans;  //æ¯æ¬¡äº¤æ¢ï¼Œè¡Œåˆ—å¼D=-D'
+			}
+		}
+		if (B[i][i] == 0) return 0;  //æ–œå¯¹è§’ä¸­æœ‰ä¸€ä¸ª0ï¼Œåˆ™ç»“æœä¸º0
+		ans = (ans * B[i][i]) % mod; //è¡Œåˆ—å¼æ˜¯æ¶ˆå…ƒç»“æœä¸­æ‰€æœ‰ä¸»å¯¹è§’çº¿å…ƒç´ ç›¸ä¹˜
+	}
+	return (ans + mod) % mod;  //C++ä¸­è´Ÿæ•°å–æ¨¡ä»ä¸ºè´Ÿæ•°ï¼Œä¸ºä¿è¯æ­£æ•°ç»“æœï¼Œè¿˜éœ€åŠ æ¨¡å–æ¨¡
 }
 
 
 int main()
 {
-    int T;
-    scanf("%d",&T);
- 
-    while(T--)
-    {
-        sign=0;
-        scanf("%I64d%I64d",&N,&MOD);
-        for(int i=0;i<N;i++)
-            for(int j=0;j<N;j++)
-                scanf("%I64d",&a[i][j]);
-        solved();
-    }
-    return 0;
+  while(~scanf("%lld%lld",&n,&mod)){
+    for(int i=0;i<n;i++){
+			for(int j=0;j<n;j++){
+				scanf("%lld",&B[i][j]);
+				B[i][j] %= mod;
+			}
+		}
+    ll ans = det(n, mod);
+    printf("%lld\n", ans);
+  }
+  return 0;
 }
-
