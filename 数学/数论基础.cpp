@@ -54,7 +54,7 @@ ll ex_gcd(ll a, ll b, ll &x, ll &y) {
 
 3. 素数筛 
 //素数筛 埃氏筛 O(nloglogn)
-const int MAXSIZE; 
+const int MAXSIZE = 1E6 + 100; 
 int Mark[MAXSIZE],ind=0;     //prime[0]起 
 int prime[MAXSIZE];    //判断是否是一个素数  Mark 标记数组 ind 素数个数  
 void Prime(){	
