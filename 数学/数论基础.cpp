@@ -2,13 +2,14 @@
 1. 欧几里得                  卡常欧几里得 
 2. EX-GCD
 3. 筛                        线性筛 欧拉筛 莫比乌斯筛 
-4. 快速幂 
+4. 快速幂 逆元
 5. 快速乘                    O(1)快速乘  卡常快速乘 
 6. 牛顿法迭代求根  
 7. 质因数分解 / 全因数分解 
 8. 原根 
-9. 欧拉函数 
-
+9. 欧拉函数                  O(log) 打表见组合数学
+10 数论分块
+11 中国剩余定理
 
 
 
@@ -54,17 +55,18 @@ ll ex_gcd(ll a, ll b, ll &x, ll &y) {
 
 3. 素数筛 
 //素数筛 埃氏筛 O(nloglogn)
-const int MAXSIZE = 1E6 + 100; 
-int Mark[MAXSIZE],ind=0;     //prime[0]起 
-int prime[MAXSIZE];    //判断是否是一个素数  Mark 标记数组 ind 素数个数  
-void Prime(){	
-	ind=0;
+const int MAXSIZE = 1E6 + 100;
+bool Mark[MAXSIZE]; int ind = 0; //prime[0]起 
+int prime[1000000];    //判断是否是一个素数  Mark 标记数组 ind 素数个数
+void Prime() { 
+    ind = 0;
     for (int i = 2; i < MAXSIZE; i++){
-        if(Mark[i]) continue;//如标记则跳过  
-        prime[ind++] = i;//否则得到一个素数
-        for (int j = i + i; j < MAXSIZE; j += i) Mark[j] = 1;//标记目前得到的素数的i倍为非素数
+        if (Mark[i])  continue;     //如标记则跳过
+        prime[ind++] = i; //否则得到一个素数
+        for (int j = i + i; j < MAXSIZE; j += i)  Mark[j] = 1; //标记目前得到的素数的i倍为非素数
     }
-}
+} Mark[0] = Mark[1] = 1;  //Mark为0是素数
+
 //线性筛+欧拉函数 O(n)
 const LL p_max = 1E5 + 100;
 LL phi[p_max];
@@ -120,7 +122,7 @@ void get_mu() {
 
 
 4. 快速幂
-//当相乘会爆long long 时需要配合快速乘使用  将乘法替换为快速乘 
+//当相乘会爆long long 时需要配合快速乘使用  将乘法替换为快速乘  p大于等于3e9的时候就要开mul
 inline ll bin(ll base, ll n, ll p) {
     ll res = 1;
     while (n) {
@@ -297,9 +299,9 @@ void slove(long long num){
 //要求 p 为质数 
 ll find_smallest_primitive_root(ll p) {
     get_factor(p - 1);
-    FOR (i, 2, p) {
+    for (int i = 2; i < p; i++) {
         bool flag = true;
-        FOR (j, 0, f_sz)
+        for (int j = 0; j < f_sz; j++)
             if (bin(i, (p - 1) / factor[j], p) == 1) {
                 flag = false;
                 break;
@@ -331,3 +333,25 @@ ll eular(ll n) {
 
 
 
+10. 数论分块
+//f(i) = ⌊ n/i ⌋ = v 时  i的取值范围为 [l,r]
+for (ll l = 1, v, r; l <= N; l = r + 1) {
+    v = N / l; r = N / v;
+}
+
+
+
+11. 中国剩余定理
+ll CRT(ll *m, ll *r, ll n) {  //无解返回-1  前置模板：扩展欧几里得
+    if (!n) return 0;
+    ll M = m[0], R = r[0], x, y, d;
+    for (int i =  1; i < n; i++) {
+        d = ex_gcd(M, m[i], x, y);
+        if ((r[i] - R) % d) return -1;
+        x = (r[i] - R) / d * x % (m[i] / d);
+        R += x * M;
+        M = M / d * m[i];
+        R %= M;
+    }
+    return R >= 0 ? R : R + M;
+}

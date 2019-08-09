@@ -25,7 +25,7 @@ struct Hash {
     }
 }hs;
 
-//BSGS模板  
+//BSGS模板   仅适用于p为素数时的情况
 struct BSGS {
     ll V, m, lim, n;
     inline ll getsqrt(ll n) {
@@ -66,3 +66,33 @@ struct BSGS {
 
 bsgs.init(a, p);
 ll ans = bsgs.cal(b);
+
+
+
+//EXBSGS   适用于p为非素数的情况
+ll exBSGS(ll a, ll b, ll p) { // a^x = b (mod p)
+    //如果有解输出的是最小的正整数解，否则输出-1
+    a %= p; b %= p;
+    if (a == 0) return b > 1 ? -1 : b == 0 && p != 1;
+    ll c = 0, q = 1;
+    while (1) {
+        ll g = __gcd(a, p);
+        if (g == 1) break;
+        if (b == 1) return c;
+        if (b % g) return -1;
+        ++c; b /= g; p /= g; q = a / g * q % p;
+    }
+    static map<ll, ll> mp; mp.clear();
+    ll m = sqrt(p + 1.5);
+    ll v = 1;
+    for (int i = 1; i < m + 1; i++) {
+        v = v * a % p;
+        mp[v * b % p] = i;
+    }
+    for (int i = 1; i < m + 1; i++) {
+        q = q * v % p;
+        auto it = mp.find(q);
+        if (it != mp.end()) return i * m - it->second + c;
+    }
+    return -1;
+}

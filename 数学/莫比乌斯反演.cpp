@@ -10,6 +10,8 @@
 //性质1: sum(u(d)) (d|n) = 1 (n == 1) or 0 (n > 1)
 //性质2: sum(u(d)/d) (d|n) = phi(n)/n
 //另一种形式:F(d) = sum(f(n)) (d|n) => f(d) = sum(u(n/d)*F(n)) (d|n)
+
+
 //线性筛选求莫比乌斯反演函数代码
 #include <bits/stdc++.h>
 #define ll long long
