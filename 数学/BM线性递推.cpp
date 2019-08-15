@@ -35,7 +35,7 @@ namespace linear_seq {
             rep(j,0,SZ(Md)) _c[i-k+Md[j]]=(_c[i-k+Md[j]]-_c[i]*_md[Md[j]])%mod;
         rep(i,0,k) a[i]=_c[i];
     }
-    int solve(ll n,VI a,VI b) {  /// a ÏµÊý b ³õÖµ b[n+1]=a[0]*b[n]+...
+    int solve(ll n,VI a,VI b) {  
         ll ans=0,pnt=0;
         int k=SZ(a);
         assert(SZ(a)==SZ(b));
