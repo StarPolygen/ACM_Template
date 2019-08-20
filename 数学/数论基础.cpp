@@ -189,7 +189,7 @@ ll sqrt(ll x) {
 
 7. 质因数分解  
 //前置模板：素数筛
-//带指数
+//带指数 O(根号n内质数个数)
 ll factor[30], f_sz, factor_exp[30];
 void get_factor(ll x) {
     f_sz = 0;
@@ -341,7 +341,7 @@ for (ll l = 1, v, r; l <= N; l = r + 1) {
 
 
 
-11. 中国剩余定理
+11. 中国剩余定理   O(nlogn)
 ll CRT(ll *m, ll *r, ll n) {  //无解返回-1  前置模板：扩展欧几里得
     if (!n) return 0;
     ll M = m[0], R = r[0], x, y, d;

@@ -94,6 +94,13 @@ int main() {
     }
 }
 
+
+//超速版本 NTT(FFT)加速BM 复杂度O(klogklogn)
+
+
+
+
+
 //普适版本    
 // given first m items init[0..m-1] and coefficents trans[0..m-1] or
 // given first 2 *m items init[0..2m-1], it will compute trans[0..m-1]

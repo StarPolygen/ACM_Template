@@ -13,7 +13,7 @@
 1. 阶乘和逆元
 //逆元   快速幂版 适用于P为素数 
 inline ll get_inv(ll x, ll p) { return bin(x, p - 2, p); }
-//逆元   Exgcd版  适用于P不为素数 
+//逆元   Exgcd版  适用于P不为素数 必须满足两数互质 否则不存在逆元
 ll get_inv2(ll a, ll M) {
     static ll x, y;
     assert(ex_gcd(a, M, x, y) == 1);

@@ -2,7 +2,7 @@
 #define ll long long
 using namespace std;
 
-//版本1： mod数为奇素数
+//二次剩余版本1： mod数为奇素数
 int Pow(int a,int b,int p){   int res=1; for(;b;a=1LL*a*a%p,b>>=1) if(b&1)res = 1LL * a * res % p;  return res;}
 
 bool Legendre(int a,int p){   return Pow(a,p-1>>1,p)==1;}
@@ -46,7 +46,7 @@ int main() {
     return 0;
 }
 
-//版本2 适用于所有模数
+//二次剩余版本2 适用于所有模数
 #include<bits/stdc++.h>
 using namespace std;
 #define ll long long 
