@@ -1,8 +1,12 @@
-//¶Å½ÌÉ¸
-//Ì×Â·Ê½£º g(1)S(n)=¡Æi=1-n h(i) ¡ª¡Æd=2-n g(d)S(n/d) 
-//Ê×ÏÈÏÈÏßÉ¸³öÊı¾İ·¶Î§¸ùºÅ×óÓÒµÄ»ıĞÔº¯ÊıµÄÇ°×ººÍ¡£ÔÙµİ¹éµÄÊµÏÖ¶Å½ÌÉ¸¡£
-//ÓÃstlÖĞµÄunordered_map£¬¶ø²»ÊÇmap
-//¾¡Á¿¼õÉÙÈ¡Ä£ºÍlonglong  Èçunordered_map 
+//æœæ•™ç­›
+//å¥—è·¯å¼ï¼š g(1)S(n)=âˆ‘i=1-n h(i) â€”âˆ‘d=2-n g(d)S(n/d) 
+//é¦–å…ˆå…ˆçº¿ç­›å‡ºæ•°æ®èŒƒå›´O(n^2/3)å·¦å³çš„ç§¯æ€§å‡½æ•°çš„å‰ç¼€å’Œã€‚å†é€’å½’çš„å®ç°æœæ•™ç­›ã€‚
+//ç”¨stlä¸­çš„unordered_mapï¼Œè€Œä¸æ˜¯map
+//å°½é‡å‡å°‘å–æ¨¡å’Œlonglong  å¦‚unordered_map 
+
+//TLE æˆ– WA å¿…è¦æ—¶ï¼š
+//åœ¨ä¿è¯ç®—æ³•æ— è¯¯çš„æƒ…å†µä¸‹ ä¸ºé¿å…å–æ¨¡é”™è¯¯æˆ–çˆ†ll å¯ä»¥define int long long + å¯å–æ¨¡çš„å…¨éƒ¨å–æ¨¡  
+//ç”¨æ­¤ä»£ç è¿è¡Œå¤§æ•°æ®å…ˆè·å¾—æ­£ç¡®ç­”æ¡ˆ åœ¨ä¾æ¬¡å»é™¤å†—ä½™çš„ll å’Œ mod å¹¶ä¸æ­£ç¡®ç­”æ¡ˆæ¯”è¾ƒä¿è¯æ— è¯¯
 
 #include<bits/stdc++.h>
 #include<tr1/unordered_map>
@@ -11,7 +15,7 @@
 #define ll long long
 using namespace std;
 
-//¿ì¶Á 
+//å¿«è¯» 
 template<typename T>inline void read(T &x)
 {
     x=0;
@@ -23,11 +27,11 @@ template<typename T>inline void read(T &x)
 }
 
 
-//¶Å½ÌÉ¸ÌâÄ¿µÄ¹Ø¼üÊÇÑ°ÕÒÅä´ÕhºÍg Ê¹µÃh=f*g   1.ÏûÈ¥  2.ÊÔ´Õ 
+//æœæ•™ç­›é¢˜ç›®çš„å…³é”®æ˜¯å¯»æ‰¾é…å‡‘hå’Œg ä½¿å¾—h=f*g   1.æ¶ˆå»  2.è¯•å‡‘ 
 long long f[N];
 
 
-//¿ìËÙÃİ ÇóÄæÔª 
+//å¿«é€Ÿå¹‚ æ±‚é€†å…ƒ 
 int inv3;
 ll fast_exp(ll a,ll b,ll c){
     ll res=1;
@@ -41,7 +45,7 @@ ll fast_exp(ll a,ll b,ll c){
     return res;
 }
 
-//±©Á¦Çó½âÇ°¸ùºÅn´ıÇó»ıĞÔº¯ÊıµÄÇ°×ººÍ £¬getÄÚµÄ´úÂë²»¾ßÓĞÆÕÊÊĞÔ 
+//æš´åŠ›æ±‚è§£å‰n^2/3å¾…æ±‚ç§¯æ€§å‡½æ•°çš„å‰ç¼€å’Œ ï¼Œgetå†…çš„ä»£ç ä¸å…·æœ‰æ™®é€‚æ€§ 
 void get(int maxn){
 	for(int i=1;i<=maxn;++i){
         f[i]=(f[i]+(1LL*i*i-3*i+2));
@@ -56,23 +60,23 @@ void get(int maxn){
 }
 
 
-//³Ë·¨È¡Ä£²Ù×÷ 
+//ä¹˜æ³•å–æ¨¡æ“ä½œ 
 ll mul(ll a,ll b){
 	return (a*b)%mod;
 }
 
 
-//¶Å½ÌÉ¸ 
+//æœæ•™ç­› 
 tr1::unordered_map<ll,int> mp;
 long long djsf(ll n)
 {
     if(n<=1e6) return f[n];
     if(mp[n]) return mp[n];
-    ll ans=(((mul(n,mul(n,n))-mul(3,mul(n,n))+mod)%mod+2*n)%mod*inv3)%mod;//hµÄÇ°×ººÍ 
+    ll ans=(((mul(n,mul(n,n))-mul(3,mul(n,n))+mod)%mod+2*n)%mod*inv3)%mod;//hçš„å‰ç¼€å’Œ 
     for(ll l=2,r;l<=n;l=r+1)
     {
         r=n/(n/l);
-        ans=(ans-(r-l+1)*djsf(n/l)%mod+mod)%mod;  //µİ¹é¼õÈ¥¦²g(d)S(n/d) 
+        ans=(ans-(r-l+1)*djsf(n/l)%mod+mod)%mod;  //é€’å½’å‡å»Î£g(d)S(n/d) 
         
     }
     
