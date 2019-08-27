@@ -13,6 +13,13 @@ ll f(ll a,ll b,ll c,ll n){
     ll M=(a*n+b)/c;
     return ((n*M%mod-f(c,c-b-1,a,M-1))%mod+mod)%mod;
 }
+//非取模版本
+ll f(ll a,ll b,ll c,ll n){
+    if(a==0)return (n+1)*(b/c);
+    if(a>=c||b>=c)return (f(a%c,b%c,c,n)+(__int128)n*(n+1)/2*(a/c)+(n+1)*(b/c));
+    ll M=(a*n+b)/c;
+    return (__int128)n*M-f(c,c-b-1,a,M-1);
+}
 
 //f、g、h模板
 //f(a,b,c,n): Σi ⌊ai+b/c⌋  i=[0,n]
