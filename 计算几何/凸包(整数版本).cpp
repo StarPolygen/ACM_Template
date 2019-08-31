@@ -1,5 +1,5 @@
-//Í¹¼¯µã´¢´æÔÚl[stack[0-top]]ÖĞ  Í¹°üÉÏµãÊıÎªtop+1
-//×¢ÒâÊÇ·ñĞèÒª±ßµã 
+//å‡¸é›†ç‚¹å‚¨å­˜åœ¨l[stack[0-top]]ä¸­  å‡¸åŒ…ä¸Šç‚¹æ•°ä¸ºtop+1
+//æ³¨æ„æ˜¯å¦éœ€è¦è¾¹ç‚¹ 
 #include <iostream>
 #include <stdio.h>
 #include <string.h>
@@ -16,7 +16,7 @@ using namespace std;
 const double eps = 1e-8;
 const double PI=acos(-1.0);
 int sgn(double k) { return fabs(k) < eps ? 0 : (k > 0 ? 1 : -1); }
-const int MAXN=500010;  //µãµÄÊıÁ¿ 
+const int MAXN=500010;  //ç‚¹çš„æ•°é‡ 
 
 struct point
 {
@@ -25,22 +25,22 @@ struct point
 point list[MAXN];
 int stack[MAXN],top;
 
-ll cross(point p0,point p1,point p2) //¼ÆËã²æ»ı  p0p1 X p0p2 
+ll cross(point p0,point p1,point p2) //è®¡ç®—å‰ç§¯  p0p1 X p0p2 
 {
     return (p1.x-p0.x)*(p2.y-p0.y)-(p1.y-p0.y)*(p2.x-p0.x);
 }    
-double dis(point p1,point p2)  //¼ÆËã p1p2µÄ ¾àÀë 
+double dis(point p1,point p2)  //è®¡ç®— p1p2çš„ è·ç¦» 
 {
     return sqrt((double)(p2.x-p1.x)*(p2.x-p1.x)+(p2.y-p1.y)*(p2.y-p1.y));
 }  
 
 
-//cross > 0 ´ú±í p0p2 ¶Ô p0p1ÎªÄæÊ±Õë 
-//		= 0 ´ú±í Æ½ĞĞ 
-//cmp º¯Êıreturn trueÊ±£¬»á½«²ÎÊı1ÅÅÔÚÇ°Ãæ 
+//cross > 0 ä»£è¡¨ p0p2 å¯¹ p0p1ä¸ºé€†æ—¶é’ˆ 
+//		= 0 ä»£è¡¨ å¹³è¡Œ 
+//cmp å‡½æ•°return trueæ—¶ï¼Œä¼šå°†å‚æ•°1æ’åœ¨å‰é¢ 
 
-//¼«½ÇÅÅĞòº¯Êı £¬ ½Ç¶ÈÏàÍ¬Ôò¾àÀëĞ¡µÄÔÚÇ°Ãæ 
-//×¢Òâ£ºµ±stackĞèÒª°üº¬±ßµã£¬ÇÒÒªÇóÄæĞòÊ±£¬Ê¹ÓÃcmp2£¬ÈçÎÈ¶¨Í¹°üÎÊÌâ 
+//æè§’æ’åºå‡½æ•° ï¼Œ è§’åº¦ç›¸åŒåˆ™è·ç¦»å°çš„åœ¨å‰é¢ 
+//æ³¨æ„ï¼šå½“stackéœ€è¦åŒ…å«è¾¹ç‚¹ï¼Œä¸”è¦æ±‚é€†åºæ—¶ï¼Œä½¿ç”¨cmp2ï¼Œå¦‚ç¨³å®šå‡¸åŒ…é—®é¢˜ 
 bool cmp(point p1,point p2) 
 {
     ll tmp=cross(list[0],p1,p2);
@@ -48,8 +48,8 @@ bool cmp(point p1,point p2)
     else if(tmp==0&&sgn(dis(list[0],p1)-dis(list[0],p2))<0) return true;
     else return false;
 }  
-// ¼«½ÇÅÅĞòº¯Êı2 ÔÚÅĞ¶ÏÎÈ¶¨Í¹°üÊ±Ê¹ÓÃ 
-// ×îÖÕ²úÉúµÄ Í¹¼¯ÄÚµÄµã ÍêÈ«°´ÕÕÄæÊ±ÕëÅÅÁĞ 
+// æè§’æ’åºå‡½æ•°2 åœ¨åˆ¤æ–­ç¨³å®šå‡¸åŒ…æ—¶ä½¿ç”¨ 
+// æœ€ç»ˆäº§ç”Ÿçš„ å‡¸é›†å†…çš„ç‚¹ å®Œå…¨æŒ‰ç…§é€†æ—¶é’ˆæ’åˆ— 
 bool cmp2(point p1,point p2){
     ll tmp=cross(list[0],p1,p2);
     if(tmp>0) return true;
@@ -60,7 +60,7 @@ bool cmp2(point p1,point p2){
     else return false;
 }
   
-void init(int n) //ÊäÈë£¬²¢°Ñ  ×î×óÏÂ·½µÄµã·ÅÔÚ list[0]  ¡£²¢ÇÒ½øĞĞ¼«½ÇÅÅĞò 
+void init(int n) //è¾“å…¥ï¼Œå¹¶æŠŠ  æœ€å·¦ä¸‹æ–¹çš„ç‚¹æ”¾åœ¨ list[0]  ã€‚å¹¶ä¸”è¿›è¡Œæè§’æ’åº 
 {
     int i,k;
     point p0;
@@ -81,7 +81,7 @@ void init(int n) //ÊäÈë£¬²¢°Ñ  ×î×óÏÂ·½µÄµã·ÅÔÚ list[0]  ¡£²¢ÇÒ½øĞĞ¼«½ÇÅÅĞò
     list[k]=list[0];
     list[0]=p0;
     
-    //´Ë´¦×¢ÒâÊ¹ÓÃcmp»¹ÊÇcmp2 
+    //æ­¤å¤„æ³¨æ„ä½¿ç”¨cmpè¿˜æ˜¯cmp2 
     sort(list+1,list+n,cmp);
 }     
 
@@ -102,7 +102,7 @@ void graham(int n)
         
         for(i=2;i<n;i++)
         {
-            while(top>0&&cross(list[stack[top-1]],list[stack[top]],list[i])<0) top--;// <0¸Ä³É<=0¼´Îª½«Í¹°ü±ßÉÏµÄµãÌß³ö
+            while(top>0&&cross(list[stack[top-1]],list[stack[top]],list[i])<0) top--;// <0æ”¹æˆ<=0å³ä¸ºå°†å‡¸åŒ…è¾¹ä¸Šçš„ç‚¹è¸¢å‡º
             top++;
             stack[top]=i;
         }    

@@ -14,7 +14,7 @@ using namespace std;
 const double eps = 1e-8;
 int sgn(double k) { return fabs(k) < eps ? 0 : (k > 0 ? 1 : -1); }
 
-//µã£º ¼Ó ¼õ ³Ë ²æ»ı   
+//ç‚¹ï¼š åŠ  å‡ ä¹˜ å‰ç§¯   
 struct Point
 {
     double x,y;
@@ -22,23 +22,28 @@ struct Point
     Point(double _x,double _y)
     {
         x = _x;y = _y;
-    }
+    }//ç‚¹å‘é‡ç›¸åŠ 
+    Point operator +(const Point &b)const
+    {
+        return Point(x + b.x,y + b.y);
+    }//ç‚¹å‘é‡å‡
     Point operator -(const Point &b)const
     {
         return Point(x - b.x,y - b.y);
     }
-    //µãÏòÁ¿²æ»ı 
-    double operator ^(const Point &b)const
-    {
-        return x*b.y - y*b.x;
-    }
+    //ç‚¹å‘é‡ç‚¹ç§¯
     double operator *(const Point &b)const
     {
         return x*b.x + y*b.y;
     }
+    //ç‚¹å‘é‡å‰ç§¯ 
+    double operator ^(const Point &b)const
+    {
+        return x*b.y - y*b.x;
+    }
 };
 
-//Ïß  Î»ÖÃ¹ØÏµ  ½»µãÇó½â   
+//çº¿  ä½ç½®å…³ç³»  äº¤ç‚¹æ±‚è§£   
 struct Line
 {
     Point s,e;
@@ -53,13 +58,13 @@ struct Line
         if(sgn((s-e)^(b.s-b.e)) == 0)
         {
             if(sgn((b.s-s)^(b.e-s)) == 0)
-                return make_pair(res,0);//Á½Ö±ÏßÖØºÏ
-            else return make_pair(res,1);//Á½Ö±ÏßÆ½ĞĞ
+                return make_pair(res,0);//ä¸¤ç›´çº¿é‡åˆ
+            else return make_pair(res,1);//ä¸¤ç›´çº¿å¹³è¡Œ
         }
         double t = ((s-b.s)^(b.s-b.e))/((s-e)^(b.s-b.e));
         res.x += (e.x - s.x)*t;
         res.y += (e.y - s.y)*t;
-        return make_pair(res,2);//ÓĞ½»µã
+        return make_pair(res,2);//æœ‰äº¤ç‚¹res
     }
 };
 
